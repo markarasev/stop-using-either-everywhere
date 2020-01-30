@@ -1,6 +1,6 @@
 # Stop using `Either` everywhere!
 
-This presentation is using [reveal.js](https://github.com/hakimel/reveal.js).
+This presentation uses [reveal.js](https://github.com/hakimel/reveal.js).
 
 ## Setup
 
