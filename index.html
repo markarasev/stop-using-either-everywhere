@@ -30,8 +30,99 @@
 
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<section>
+					<h1>Stop using Either everywhere!</h1>
+					<aside class="notes">
+						Sujet à débat, je vais donner beaucoup d'avis personnels. Si vous n'êtes
+						pas d'accord, c'est normal. Cela dit, tout se dont je vais parler ici 
+						est inspiré de faits réels, issus de mon expérience de développeur.
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h2>Quelques exemples d'utilisation</h2>
+						À vous de me donner l'intention de l'auteur.
+					</section>
+					<section>
+						<pre><code data-trim>
+							def validateFile(file: File): Either[UnexpectedFile, DataFile]
+						</code></pre>
+						<ul>
+							<!-- augmenter l'espacement entre les lignes ? -->
+							<li class="fragment">validation</li>
+							<li class="fragment">UnexpectedFile est une erreur métier</li>
+							<li class="fragment">DataFile est l'entrée validée</li>
+						</ul>
+						<aside class="notes">
+							convention : erreurs à gauche (merci pour les gauchers), résultats 
+							corrects à droite
+						</aside>
+					</section>
+					<section>
+						<pre><code data-trim>
+							def classifyFile(file: File): Either[SourceFile, BinaryFile]
+						</code></pre>
+						<ul>
+							<!-- augmenter l'espacement entre les lignes ? -->
+							<li class="fragment">catégorisation</li>
+							<li class="fragment">BinaryFile est une entrée métier à traiter</li>
+							<li class="fragment">SourceFile aussi</li>
+						</ul>
+						<aside class="notes">
+							DAFUK le biais à droite ?
+						</aside>
+					</section>
+					<section>
+						<pre><code data-trim>
+							def classifyFile(file: File): Either[UnexpectedFile, DataFile]
+						</code></pre>
+						<ul>
+							<!-- augmenter l'espacement entre les lignes ? -->
+							<li class="fragment">catégorisation ?</li>
+							<li class="fragment">DataFile est une entrée métier à traiter</li>
+							<li class="fragment">
+								UnexpectedFile ressemble à une erreur mais en est-ce une vraiment ?
+							</li>
+						</ul>
+					</section>
+					<section>
+						<pre><code data-trim>
+							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
+						</code></pre>
+						<ul>
+							<!-- augmenter l'espacement entre les lignes ? -->
+							<li class="fragment">catégorisation ?</li>
+							<li class="fragment">
+								UnexpectedFile ressemble à une erreur mais est à droite
+							</li>
+							<li class="fragment">
+								DataFile ressemble à une entrée métier à traiter mais est à gauche
+							</li>
+							<li class="fragment">brainfuck</li>
+						</ul>
+					</section>
+					<!-- refaire les mêmes exemples avec Or plus tard et voir comment 
+						l'interprétation évolue (moins de doutes, détetion d'erreurs de 
+						programmation ?).-->
+				</section>
+
+				<section>
+					<h2>Mais au fait, c'est quoi Either exactement ?</h2>
+					<!-- scaladoc, union disjointe, etc. -->
+					<!-- relister les différents exemples sur une slide -->
+					<!-- placer ici ou ailleurs que devant les multiples cas d'usages 
+						d'Either, s'appuyer uniquement sur une convention est insuffisant, 
+						le type est trop général -->
+					<!-- déplacer ces notes dans une sous-slide plus bas ou ailleurs -->
+					<aside class="notes">
+						L'interprétation dépend du contexte, de l'expérience de celui qui 
+						lit le code et de son parcours, des coding-rules de l'équipe, etc.
+					</aside>
+				</section>
+
+				<!-- reprendre les exemples et proposer des alternatives -->
 			</div>
 		</div>
 
