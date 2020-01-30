@@ -108,6 +108,16 @@
 						programmation ?).-->
 				</section>
 
+				<!-- 
+					ici ou plus bas : oui mais Marc, pourquoi tu fais pas une sealed family? 
+					Ben peut-être que j'ai pas la main sur les définitions des types DataFile, 
+					UnexpectedFile, SourceFile et BinayFile et qu'elles se trouvent dans des 
+					dépendances externes. Les wrapper dans une sealed family reviendrait à 
+					faire exactement la même chose qu'Either. Et même, ça serait 
+					potentiellement rébarbatif si je devais faire une sealed family par 
+					couple que je souhaite retourner à chaque fonction.
+				-->
+
 				<section>
 					<h2>Mais au fait, c'est quoi Either exactement ?</h2>
 					<!-- scaladoc, union disjointe, etc. -->
