@@ -31,15 +31,20 @@
 		<div class="reveal">
 			<div class="slides">
 
+				<!-- Titre -->
 				<section>
 					<h1>Stop using Either everywhere!</h1>
 					<aside class="notes">
+						Type dont je trouve l'usage abusif dans beaucoup de bases de code. Je 
+						vais tenter d'expliquer pourquoi je pense comme ça, et quelles 
+						alternatives j'ai pu trouver.
 						Sujet à débat, je vais donner beaucoup d'avis personnels. Si vous n'êtes
 						pas d'accord, c'est normal. Cela dit, tout se dont je vais parler ici 
 						est inspiré de faits réels, issus de mon expérience de développeur.
 					</aside>
 				</section>
 
+				<!-- 1. Exemples d'utilisation-->
 				<section>
 					<section>
 						<h2>Quelques exemples d'utilisation</h2>
@@ -118,6 +123,7 @@
 					couple que je souhaite retourner à chaque fonction.
 				-->
 
+				<!-- 2. C'est quoi Either ? -->
 				<section>
 					<h2>Mais au fait, c'est quoi Either exactement ?</h2>
 					<!-- scaladoc, union disjointe, etc. -->
@@ -130,9 +136,41 @@
 						L'interprétation dépend du contexte, de l'expérience de celui qui 
 						lit le code et de son parcours, des coding-rules de l'équipe, etc.
 					</aside>
+					<!-- autres inconvénients d'Either ici ? (implicit class 
+					maison pour scala 2.11, withFilter 2.12?, ) -->
 				</section>
 
-				<!-- reprendre les exemples et proposer des alternatives -->
+				<!-- validation, il existe un paquet de libs (en lister) pour en faire 
+					mais on ne parlera que de celles que je connais, introduire scalactic 
+					et Or, cats.Validated ? -->
+				<!-- reprendre les exemples et proposer des alternatives si nécessaire -->
+				<!-- avantages / inconvénients (tuyauterie [mais c'est la garantie de ne 
+					pas faire n'importe quoi ?], badMap, map, meaningful type over convention, 
+					Every > cats.Nel, accumulation, limitations: see TRM code [??], ...) -->
+				
+				<!-- partie 2 : composition avec d'autres monades -->
+				<!-- problème de l'API asynchrone avec gestion des erreurs (proposer une 
+					API exemple) : Future[Either], Future[Or], même combat -->
+				<!-- Monad transformer ? Naah. -->
+				<!-- liste de solutions (cats.IO, EitherT, ZIO), on ne parlera que de 
+					celles que je connais encore une fois -->
+				<!-- ZIO, avantages / inconvénients (requiert un zio.Runtime [threadpools], 
+					ou force l'utilisateur à faire du ZIO,
+					donc à ne pas en abuser quitte à faire de la tuyauterie en core une fois, 
+					peut-être que des IO monads plus génériques [comme cats.IO ?] permettent 
+					de contourner ce problème, cependant IO ne veut toujours rien dire [sauf 
+					si tout le main est dans une IO monad, ce qui est rarement le cas dans 
+					nos bases de code qui font du akka-stream, etc où on introduit ZIO]) 
+					en résumé = better Future (canal d'erreurs)
+				-->
+				<!-- revoir l'API avec ZIO, porblème de la compatibilité erreurs / 
+					exceptions ? -->
+				<!-- Option ? autres ? -->
+
+				<!-- liste d'exemples Either / Or / IO et demander à l'audience ce qu'elle 
+					en pense ? -->
+
+				<!-- comme d'hab, there is no silver bullet -->
 			</div>
 		</div>
 
