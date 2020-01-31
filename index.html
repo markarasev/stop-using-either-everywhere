@@ -233,15 +233,68 @@
 							par couple que je souhaite retourner à chaque fonction.
 						</aside>
 					</section>
-					<!-- relister les différents exemples sur une slide -->
-					<!-- placer ici ou ailleurs que devant les multiples cas d'usages 
-						d'Either, s'appuyer uniquement sur une convention est insuffisant, 
-						le type est trop général -->
-					<!-- déplacer ces notes dans une sous-slide ailleurs -->
-					<aside class="notes">
-						L'interprétation dépend du contexte, de l'expérience de celui qui 
-						lit le code et de son parcours, des coding-rules de l'équipe, etc.
-					</aside>
+				</section>
+
+
+
+				<!-- 3. Pourquoi Either c'est pas toujours bien ? -->
+				<section>
+					<section>
+						<h2>Pourquoi utiliser <mark>Either</mark> n'est pas toujours idéal ?</h2>
+					</section>
+					<section>
+						<!-- Trouver mieux comme titre ? -->
+						<h3>Le code est la montagne à gravir</h3>
+						<p>L'interprétation du code dépend :</p>
+						<ul>
+							<li class="fragment">du contexte du projet</li>
+							<li class="fragment">de l'expérience personnelle du lecteur</li>
+							<li class="fragment">des coding-rules de l'équipe (conventions)</li>
+							<li class="fragment">etc.</li>
+						</ul>
+						<p class="fragment">Beaucoup de variables.</p>
+					</section>
+					<section>
+						<h3>Les types sont des amis</h3>
+						<p>L'interprétation d'un type dépend (idéalement) :</p>
+						<ul>
+							<li class="fragment">de sa définition uniquement</li>
+						</ul>
+						<!-- TODO espacer -->
+						<p class="fragment">Or la combinaison de la définition d'Either et 
+							son usage conventionnel créent de l'ambiguïté.</p>
+						<!-- insérer GIF ? peut-être 
+							https://giphy.com/gifs/filmeditor-christmas-movies-vanessa-ferlito-3o6wrFfkrw1xEk35VS ? -->
+						<aside class="notes">
+							Les types sont aussi là pour nous aider dans cette tâche (en principe).
+						</aside>
+					</section>
+					<section>
+						<h3>Either est trop général</h3>
+						<!-- def decodeFile(file: File): Either[FileDecodingError, DecodedFile] -->
+						<pre><code class="scala" data-trim>
+							// validation : Left = erreur
+							def validateFile(file: File): Either[FileValidationError, DataFile]
+
+							// catégorisation : Left = entrée valide
+							def classifyFile(file: File): Either[SourceFile, BinaryFile]
+
+							// validation ?
+							def validateFile(file: File): Either[UnexpectedFile, DataFile]
+
+							// catégorisation ?
+							def classifyFile(file: File): Either[UnexpectedFile, DataFile]
+
+							// ??
+							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
+						</code></pre>
+						<aside class="notes">
+							<!-- devant les multiples cas d'usages d'Either -->
+							Si on reprend nos exemples de départ mon avis est que s'appuyer 
+							uniquement sur une convention est insuffisant, car le type est trop 
+							général.
+						</aside>
+					</section>
 					<!-- autres inconvénients d'Either ici ? (implicit class 
 					maison pour scala 2.11, withFilter 2.12?, ) -->
 				</section>
