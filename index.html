@@ -151,19 +151,11 @@
 						programmation ?).-->
 				</section>
 
-				<!-- 
-					ici ou plus bas : oui mais Marc, pourquoi tu fais pas une sealed family? 
-					Ben peut-être que j'ai pas la main sur les définitions des types DataFile, 
-					UnexpectedFile, SourceFile et BinayFile et qu'elles se trouvent dans des 
-					dépendances externes. Les wrapper dans une sealed family reviendrait à 
-					faire exactement la même chose qu'Either. Et même, ça serait 
-					potentiellement rébarbatif si je devais faire une sealed family par 
-					couple que je souhaite retourner à chaque fonction.
-				-->
-
 				<!-- 2. C'est quoi Either ? -->
 				<section>
 					<section>
+						<!-- trouver un meilleur truc pour mettre en valeur le code dans les 
+							titres -->
 						<h2>Mais au fait, c'est quoi <mark>Either</mark> exactement ?</h2>
 					</section>
 					<!-- This is cool but I don't want to rely on internet connection. -->
@@ -208,7 +200,33 @@
 							</code></pre>
 						</div>
 					</section>
-				
+					<!-- Ici ou entre les parties 1 et 2 ? L'avantage d'ici c'est les sealed 
+					families ont déjà été évoquées. -->
+					<section>
+						<h3>Pourquoi utiliser Either[BinaryFile, SourceFile] ?</h3>
+						<ul>
+							<li class="fragment">pas forcément le besoin (ni le temps) de tout modéliser tout le temps</li>
+							<li class="fragment"><pre><code class="scala" data-trim>
+								import fancy.jar.BinaryFile
+								import other.fancy.jar.SourceFile
+	
+								val file: Either[BinaryFile, SourceFile] = ???
+							</code></pre></li>
+						</ul>
+						<aside class="notes">
+							Oui mais Marc, pourquoi tu fais pas une sealed family 
+							(et on garderait Either pour la gestion d'erreurs) ? 
+
+							 - Pour le retour d'une seule fonction, c'est peut-être overkill.
+
+							 - Peut-être que j'ai pas la main sur les définitions des types 
+							SourceFile et BinaryFile et qu'elles se trouvent dans des 
+							dépendances externes. Les wrapper dans une sealed family reviendrait à 
+							faire exactement la même chose qu'Either. Et même, ça serait 
+							potentiellement très rébarbatif si je devais faire une sealed family 
+							par couple que je souhaite retourner à chaque fonction.
+						</aside>
+					</section>
 					<!-- relister les différents exemples sur une slide -->
 					<!-- placer ici ou ailleurs que devant les multiples cas d'usages 
 						d'Either, s'appuyer uniquement sur une convention est insuffisant, 
