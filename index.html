@@ -52,12 +52,12 @@
 					</section>
 					<section>
 						<pre><code class="scala" data-trim>
-							def validateFile(file: File): Either[UnexpectedFile, DataFile]
+							def validateFile(file: File): Either[FileValidationError, DataFile]
 						</code></pre>
 						<ul>
 							<!-- augmenter l'espacement entre les lignes ? -->
 							<li class="fragment">validation</li>
-							<li class="fragment">UnexpectedFile est une erreur métier</li>
+							<li class="fragment">FileValidationError est une erreur métier</li>
 							<li class="fragment">DataFile est l'entrée validée</li>
 						</ul>
 						<aside class="notes">
@@ -77,6 +77,22 @@
 						</ul>
 						<aside class="notes">
 							DAFUK le biais à droite ?
+						</aside>
+					</section>
+					<section>
+						<pre><code class="scala" data-trim>
+							def validateFile(file: File): Either[UnexpectedFile, DataFile]
+						</code></pre>
+						<ul>
+							<!-- augmenter l'espacement entre les lignes ? -->
+							<li class="fragment">validation</li>
+							<li class="fragment">
+								UnexpectedFile est une erreur métier (plus ambigu qu'
+								UnexpectedFileError ou FileValidationError)
+							</li>
+							<li class="fragment">DataFile est l'entrée validée</li>
+						</ul>
+						<aside class="notes">
 						</aside>
 					</section>
 					<section>
