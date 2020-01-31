@@ -163,13 +163,57 @@
 
 				<!-- 2. C'est quoi Either ? -->
 				<section>
-					<h2>Mais au fait, c'est quoi <mark>Either</mark> exactement ?</h2>
-					<!-- scaladoc, union disjointe, etc. -->
+					<section>
+						<h2>Mais au fait, c'est quoi <mark>Either</mark> exactement ?</h2>
+					</section>
+					<!-- This is cool but I don't want to rely on internet connection. -->
+					<!-- <section data-background-iframe="https://www.scala-lang.org/api/current/scala/util/Either.html"> -->
+					<!-- </section> -->
+					<section>
+						<img data-src="assets/either_scaladoc.png">
+					</section>
+					<section>
+						<h3>Qu'est-ce qu'une réunion disjointe ? 🇫🇷🐔</h3>
+						<ul>
+							<li class="fragment">coproduit</li>
+							<li class="fragment">sum type</li>
+							<li class="fragment">(encore plein d'autres noms)</li>
+							<!-- Utiliser autre chose qu'Either/Left/Right ici ? 
+								Fruit/Apple/Banana ? Autre chose de plus binaire ? -->
+							<li class="fragment"><pre><code class="scala" data-trim>
+								sealed trait Either
+								case object Left extends Either
+								case object Right extends Either
+							</code></pre></li>
+						</ul>
+						<aside class="notes">
+							Pourquoi ya autant de noms pour désigner la même chose ? Je ne sais 
+							pas, demandez aux scientifiques.
+						</aside>
+					</section>
+					<section>
+						Sémantiquement...
+						<pre class="fragment"><code class="scala" data-trim>
+							sealed trait File
+							case object BinaryFile extends File
+							case object SourceFile extends File
+							val file: File = ???
+						</code></pre>
+						<div class="fragment">
+							<h3><==></h3>
+							<pre><code class="scala" data-trim>
+								case object BinaryFile
+								case object SourceFile
+								val file: Either[BinaryFile, SourceFile] = ???
+							</code></pre>
+						</div>
+					</section>
+				
 					<!-- relister les différents exemples sur une slide -->
 					<!-- placer ici ou ailleurs que devant les multiples cas d'usages 
 						d'Either, s'appuyer uniquement sur une convention est insuffisant, 
 						le type est trop général -->
-					<!-- déplacer ces notes dans une sous-slide plus bas ou ailleurs -->
+					<!-- déplacer ces notes dans une sous-slide ailleurs -->
 					<aside class="notes">
 						L'interprétation dépend du contexte, de l'expérience de celui qui 
 						lit le code et de son parcours, des coding-rules de l'équipe, etc.
