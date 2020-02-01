@@ -359,8 +359,53 @@
 							Les "refutable-patterns" ne fonctionnent pas non plus.
 						</aside>
 					</section>
-					<!-- autres inconvénients d'Either ici ? (accumulation / traverse ?) -->
-					<!-- voir test-scala -->
+					<section>
+						<h3>Accumulation d'erreurs</h3>
+						<pre><code class="scala" data-trim>
+							def retire(worker: Worker): Either[List[CannotRetireError], Pensioner] = {
+							  var errors = List.empty // erf
+							  if (worker.age < 52) 
+							    errors = CannotRetireError.TooYoung +: errors // uuh
+							  if (worker.workedQuarters < 172) 
+							    errors = CannotRetireError.DidNotWorkedEnough +: errors // ooh
+							  if (errors.isEmpty) Right(Pensioner(worker)) else Left(errors)
+							}
+
+							val marc = Worker(age = 27, workedQuarters = 15)
+							retire(marc) // Left(Seq(TooYoung, DidNotWorkedEnough))
+						</code></pre>
+						<aside class="notes">
+							On est tout nu pour faire de l'accumulation, obligé de faire du 
+							mutable.
+							Ah, et ça serait bien d'avoir un type de liste non vide pour les 
+							erreurs.
+						</aside>
+					</section>
+					<section>
+						<h3>Traverse</h3>
+						<pre><code class="scala" data-trim>
+							val eitherList: List[Either[CannotRetireError, Pensioner]] =
+							  Left(TooYoung) :: Right(marc) :: Left(DidNotWorkedEnough)
+
+							val listEither: Either[List[CannotRetireError], List[Pensioner]] = ???
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+						  val eitherList: List[Either[List[CannotRetireError], Pensioner]] = 
+						    List(
+						      Left(TooYoung :: DidNotWorkedEnough),
+						      Right(marc),
+						      Left(TooYoung :: Nil)
+						    )
+
+						  val listEither: Either[List[CannotRetireError], List[Pensioner]] = ???
+						</code></pre>
+						<p class="fragment">Qui a envie d'écrire ce code ?</p>
+						<aside class="notes">
+							(on peut voir que Marc s'en est sorti)
+							(si des gens répondent oui dire "Ça me rassure, je ne suis pas le 
+							seul à être masochiste.")
+						</aside>
+					</section>
 				</section>
 
 
