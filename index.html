@@ -295,8 +295,50 @@
 							général.
 						</aside>
 					</section>
-					<!-- autres inconvénients d'Either ici ? (implicit class 
-					maison pour scala 2.11, withFilter 2.12?, ) -->
+					<section>
+						<h3>Scala 2.11</h3>
+						<pre><code class="scala" data-trim>
+							object MonadicEither {
+
+							  implicit class EitherMonadicOps[A, B](e: Either[A, B]) {
+
+						      def flatMap[A1 >: A, B1](f: B => Either[A1, B1]): Either[A1, B1] = 
+						        e match {
+						          case Right(b) => f(b)
+						          case _        => e.asInstanceOf[Either[A1, B1]]
+						        }
+										
+						        /* ... */
+						</code></pre>
+						<pre><code class="scala" data-trim>
+							import MonadicEither._
+
+							Right(1).flapMap(Left("Error"))
+						</code></pre>
+						<aside class="notes">
+							Qui utilise encore scala 2.11 ? Nous mais chut.
+							On copie-colle du code, mais aimerait faire autre chose de notre 
+							temps et éviter de maintenir ce code, même si il y a peu de risques.
+						</aside>
+					</section>
+					<section>
+						<h3>Cross-compile</h3>
+						<img data-src="assets/monadic_either.png">
+						<pre><code class="scala" data-trim>
+							// scala 2.12
+							object MonadicEither
+						</code></pre>
+						<pre><code class="scala" data-trim>
+							import MonadicEither._
+
+							Right(1).flapMap(Left("Error"))
+						</code></pre>
+						<aside class="notes">
+							Obligés d'avoir un objet MonadicEither vide en scala 2.12+ pour
+							cross-compiler du code en 2.11.
+						</aside>
+					</section>
+					<!-- autres inconvénients d'Either ici ? (withFilter 2.12?, ) -->
 					<!-- voir test-scala -->
 				</section>
 
