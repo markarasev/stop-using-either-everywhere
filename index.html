@@ -338,7 +338,28 @@
 							cross-compiler du code en 2.11.
 						</aside>
 					</section>
-					<!-- autres inconvénients d'Either ici ? (withFilter 2.12?, ) -->
+					<section>
+						<h3>Gardes</h3>
+						<pre><code class="scala" data-trim>
+							for {
+							  i <- Right(1)
+							  if i > 0
+							} yield i
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							// error: value withFilter is not a member of Right[Double,Int]
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							for (x: Int <- right1) yield x
+							// error: value withFilter is not a member of Right[Double,Int]
+						</code></pre>
+						<aside class="notes">
+							Demander à l'audience ce qu'il se passe pour le premier exemple.
+							
+							Les "refutable-patterns" ne fonctionnent pas non plus.
+						</aside>
+					</section>
+					<!-- autres inconvénients d'Either ici ? (accumulation / traverse ?) -->
 					<!-- voir test-scala -->
 				</section>
 
