@@ -150,9 +150,6 @@
 							tu seras prévenu.
 						</aside>
 					</section>
-					<!-- refaire les mêmes exemples avec Or plus tard et voir comment 
-						l'interprétation évolue (moins de doutes, détetion d'erreurs de 
-						programmation ?).-->
 				</section>
 
 
@@ -438,23 +435,143 @@
 
 				<!-- 5. Scalactic -->
 				<section>
-					<h3>Scalactic</h3>
-					<ul>
-						<li class="fragment">fondation de Scalatest</li>
-						<li class="fragment">504 classes</li>
-						<li class="fragment">1,5 Mo</li>
-						<li class="fragment">développement actif</li>
-					</ul>
-					<aside class="notes">
-						- (donc déjà dans ton scope de test si tu utilises Scalatest)
-						- petite librairie (cats-core 2.1.0 2072 classes 4,7 Mo) mais plus 
-						tellement : a doublé de volume entre la 3.0.8 et la 3.1.0 
-						(315 -> 504 classes, 706 Ko -> 1,5 Mo)
-						- 3.1.0 sortie le 29/11 dernier
-					</aside>
+					<section>
+						<h2>Scalactic</h2>
+						<ul>
+							<li class="fragment">fondation de Scalatest</li>
+							<li class="fragment">504 classes</li>
+							<li class="fragment">1,5 Mo</li>
+							<li class="fragment">développement actif</li>
+						</ul>
+						<aside class="notes">
+							- (donc déjà dans ton scope de test si tu utilises Scalatest)
+							- petite librairie (cats-core 2.1.0 2072 classes 4,7 Mo) mais plus 
+							tellement : a doublé de volume entre la 3.0.8 et la 3.1.0 
+							(315 -> 504 classes, 706 Ko -> 1,5 Mo)
+							- 3.1.0 sortie le 29/11 dernier
+						</aside>
+					</section>
+					<section>
+						<h3>scalactic.Or</h3>
+						<ul>
+							<li class="fragment">Either[L, R] devient Or[G, B]</li>
+							<li class="fragment">Left devient Good</li>
+							<li class="fragment">Right devient Bad</li>
+							<li class="fragment">erreurs à droite</li>
+						</ul>
+						<aside class="notes">
+							ne respecte pas la convention (principle of least surprise)
+						</aside>
+					</section>
+					<section>
+						<pre><code class="scala" data-trim>
+							for {
+							  x <- Right(1)
+							  y <- Left("Error")
+							} yield x + y // Left("Error")
+						</code></pre>
+						<pre><code class="scala" data-trim>
+							for {
+							  x <- Good(1)
+							  y <- Bad("Error")
+							} yield x + y // Bad("Error")
+						</code></pre>
+						<aside class="notes">
+							Les types Good et Bad portent une sémantique contrairement à Left et Right.
+						</aside>
+					</section>
+					<section>
+						<pre><code class="scala" data-trim>
+							// validation
+							def validateFile(file: File): Either[FileValidationError, DataFile]
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							// ne change pas grand chose
+							def validateFile(file: File): Or[DataFile, FileValidationError]
+						</code></pre>
+					</section>
+					<!-- Pas sûr que ce soit franchement nécessaire à ce stade. C'est bien 
+					pour l'exhaustivité mais risque de perdre de vue l'objectif de montrer 
+					l'ambiguïté. -->
+					<!-- <section>
+						<pre><code class="scala" data-trim>
+							def decodeFile(file: File): Either[FileDecodingError, DecodedFile]
+						</code></pre>
+						<aside class="notes">
+						</aside>
+					</section> -->
+					<section>
+						<pre><code class="scala" data-trim>
+							// catégorisation
+							def classifyFile(file: File): Either[SourceFile, BinaryFile]
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							// Bad[SourceFile] ??
+							// erreur de programmation manifeste
+							def classifyFile(file: File): Or[BinaryFile, SourceFile]
+						</code></pre>
+						<aside class="notes">
+							Ne doit pas changer, ne rentre pas dans le use-case de Or.
+						</aside>
+					</section>
+					<section>
+						<pre><code class="scala" data-trim>
+							// UnexpectedFile est une erreur ?
+							def validateFile(file: File): Either[UnexpectedFile, DataFile]
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							// UnexpectedFile est une erreur car Bad
+							def validateFile(file: File): Or[DataFile, UnexpectedFile]
+						</code></pre>
+					</section>
+					<section>
+						<pre><code class="scala" data-trim>
+							// catégorisation
+							def classifyFile(file: File): Either[UnexpectedFile, DataFile]
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							// validation
+							def classifyFile(file: File): Or[DataFile, UnexpectedFile]
+						</code></pre>
+					</section>
+					<section>
+						<pre><code class="scala" data-trim>
+							// catégorisation
+							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							// erreur de programmation manifeste
+							def classifyFile(file: File): Or[UnexpectedFile, DataFile]
+						</code></pre>
+						<aside class="notes">
+							Mauvais usage du type Or.
+						</aside>
+					</section>
+					<section>
+						<h3>Moins d'ambiguïté</h3>
+						<!-- def decodeFile(file: File): Either[FileDecodingError, DecodedFile] -->
+						<pre><code class="scala" data-trim>
+							// validation : Bad = erreur
+							def validateFile(file: File): Or[DataFile, FileValidationError]
+
+							// catégorisation : Left = entrée valide
+							def classifyFile(file: File): Either[SourceFile, BinaryFile]
+
+							// validation : Bad = erreur
+							def validateFile(file: File): Or[DataFile, UnexpectedFile]
+
+							// catégorisation : Left = entrée valide
+							def classifyFile(file: File): Either[UnexpectedFile, DataFile]
+
+							// catégorisation : Left = entrée valide
+							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
+						</code></pre>
+						<aside class="notes">
+							moins de doutes + détetion d'erreurs de programmation
+						</aside>
+					</section>
 				</section>
 
-				<!-- reprendre les exemples et proposer des alternatives si nécessaire -->
 				<!-- avantages / inconvénients (tuyauterie [mais c'est la garantie de ne 
 					pas faire n'importe quoi ?], badMap, map, meaningful type over convention, 
 					Every > cats.Nel, accumulation, limitations: see TRM code [??], aurait 
