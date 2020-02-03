@@ -361,7 +361,7 @@
 						<pre><code class="scala" data-trim>
 							def retire(worker: Worker): Either[List[CannotRetireError], Pensioner] = {
 							  var errors = List.empty // erf
-							  if (worker.age < 52) 
+							  if (worker.age < 62) 
 							    errors = CannotRetireError.TooYoung +: errors // uuh
 							  if (worker.workedQuarters < 172) 
 							    errors = CannotRetireError.DidNotWorkedEnough +: errors // ooh
@@ -570,11 +570,155 @@
 							moins de doutes + détetion d'erreurs de programmation
 						</aside>
 					</section>
+					<section>
+						<h3>Notation infixe</h3>
+						<pre><code class="scala" data-trim>
+							def validateFile(file: File): Or[DataFile, FileValidationError]
+						</code></pre>
+						<pre><code class="scala" data-trim>
+							def validateFile(file: File): DataFile Or FileValidationError
+						</code></pre>
+					</section>
+					<section>
+						<h3>Every</h3>
+						<pre><code class="scala" data-trim>
+							One("Too young.") // Every[String]
+							
+							Many("Too young.", "Did not worked enough.") // Every[String]
+						</code></pre>
+						<aside class="notes">
+							NonEmptyList backée par un Vector, va nous servir pour l'accumulation.
+						</aside>
+					</section>
+					<!-- définir DidNotWorkedEnough, Worker et Pensioner ? -->
+					<section>
+						<pre><code class="scala" data-trim>
+							import org.scalactic.Accumulation._
+						</code></pre>
+					</section>
+					<section>
+						<h3>Accumulation avec withGood 1/3</h3>
+						<pre><code class="scala" data-trim>
+							sealed trait ParseError
+							case object EmptyName extends ParseError
+							case object NegativeAge extends ParseError
+							case object InvalidAge extends ParseError
+						</code></pre>
+						<pre><code class="scala" data-trim>
+							case class Person(name: String, age: Int)
+						</code></pre>
+						<aside class="notes">
+							Dans l'exemple qui va suivre on va vouloir valider des inputs textuels 
+							pour créer une personne dans notre système.
+						</aside>
+					</section>
+					<section>
+						<h3>Accumulation avec withGood 2/3</h3>
+						<pre><code class="scala" data-trim>
+							def parseName(input: String): String Or One[EmptyName] = {
+							  val trimmed = input.trim
+							  if (!trimmed.isEmpty) Good(trimmed) else Bad(One(EmptyName))
+							}
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							def parseAge(input: String): Int Or One[ParseError] = try {
+							  val age = input.trim.toInt
+							  if (age >= 0) Good(age) else Bad(One(NegativeAge))
+							} catch { case _: NumberFormatException => Bad(One(InvalidAge)) }
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							def parsePerson(inputName: String, inputAge: String)
+							: Person Or Every[ParseError] =
+							  withGood(parseName(inputName), parseAge(inputAge)) { 
+							    (name, age) => Person(name, age) 
+							  }
+						</code></pre>
+						<aside class="notes">
+							Scalactic offre plusieurs moyens de faire de l'accumulation d'erreurs. 
+
+							Notation infixe (j'aime bien pour limiter les []).
+
+							Exemple de la doc.
+						</aside>
+					</section>
+					<section>
+						<h3>Accumulation avec withGood 3/3</h3>
+						<pre><code class="scala" data-trim>
+							parsePerson("Bridget Jones", "29")
+							// Result: Good(Person(Bridget Jones,29))
+							
+							parsePerson("Bridget Jones", "")
+							// Result: Bad(One(InvalidAge))
+							
+							parsePerson("Bridget Jones", "-29")
+							// Result: Bad(One(NegativeAge))
+							
+							parsePerson("", "")
+							// Result: Bad(Many(InvalidAge, NegativeAge))
+						</code></pre>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<h3>Accumulation avec when 1/2</h3>
+						<pre><code class="scala" data-trim>
+							sealed trait CannotRetireError
+							case object TooYoung extends CannotRetireError
+							case object DidNotWorkedEnough extends CannotRetireError
+						</code></pre>
+						<aside class="notes">
+							On revient à notre exemple avec le système de retraites dont voici 
+							les erreurs.
+						</aside>
+					</section>
+					<section>
+						<h3>Accumulation avec when 2/2</h3>
+						<pre><code class="scala" data-trim>
+							def isOldEnough(worker: Worker): Validation[CannotRetireError] =
+							  if (worker.age >= 62) Pass else Fail(TooYoung)
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							def hasWorkedEnough(worker: Worker): Validation[CannotRetireError] =
+							  if (worker.workedQuarters >= 172) Pass else Fail(DidNotWorkedEnough)
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							def retire(worker: Worker): Or[Pensioner, Every[CannotRetireError]] = 
+							  Good(worker).when(isOldEnough, hasWorkedEnough).map(Pensioner.apply)
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							val marc = Worker(age = 27, workedQuarters = 15)
+							retire(marc) // Bad(Many(TooYoung, DidNotWorkedEnough))
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+							val somebody = Worker(age = 65, workedQuarters = 181)
+							retire(somebody) // Good(Pensioner(...))
+						</code></pre>
+					</section>
+					<section>
+						<h3>Autres avantages sur Either</h3>
+						<ul>
+							<li>pas de différences entre les versions de Scala</li>
+							<li>
+								withFilter est défini
+								<pre><code class="scala" data-trim>
+									for {
+									  i <- Good(1)
+									  if i > 0 // compiles
+									} yield i 
+								</code></pre>
+							</li>
+						</ul>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<h3>Inconvénients</h3>
+					</section>
 				</section>
 
 				<!-- avantages / inconvénients (tuyauterie [mais c'est la garantie de ne 
-					pas faire n'importe quoi ?], badMap, map, meaningful type over convention, 
-					Every > cats.Nel, accumulation, limitations: see TRM code [??], aurait 
+					pas faire n'importe quoi ?], meaningful type over convention, 
+					Every > cats.Nel, limitations: see TRM code [??], aurait 
 					pu respecter la convention, ...) -->
 				<!-- new Sclactic NonEmptyCols -->
 				<!-- tout un tas d'anyvals (PosInt, NegInt, NonEmptyList) surtout depuis 
