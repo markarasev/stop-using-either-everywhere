@@ -693,20 +693,35 @@
 							val somebody = Worker(age = 65, workedQuarters = 181)
 							retire(somebody) // Good(Pensioner(...))
 						</code></pre>
-					</section>
+          </section>
+          <section>
+            withFilter est défini via Validation :
+            <pre><code class="scala" data-trim>
+              def greaterThan0(i: Int): Validation[String] =
+                if (i > 0) Pass else Fail(s"$i is less than or equal to 0")
+                
+              for {
+                i <- Good(-1)
+                if greaterThan0(i)
+              } yield i // Bad("-1 is less than or equal to 0")
+            </code></pre>
+          </section>
+          <section>
+            mais cela empêche les "refutable patterns" de fonctionner :
+            <pre><code class="scala" data-trim>
+              for (x: Int <- Good(1)) yield x
+              // error: type mismatch;
+              // found   : Boolean(true)
+              // required: org.scalactic.Validation[?]
+            </code></pre>
+						<aside class="notes">
+              Ou alors je n'ai pas trouvé comment faire.
+						</aside>
+          </section>
 					<section>
 						<h3>Autres avantages sur Either</h3>
 						<ul>
 							<li>pas de différences entre les versions de Scala</li>
-							<li>
-								withFilter est défini
-								<pre><code class="scala" data-trim>
-									for {
-									  i <- Good(1)
-									  if i > 0 // compiles
-									} yield i 
-								</code></pre>
-							</li>
 						</ul>
 						<aside class="notes">
 						</aside>
