@@ -695,6 +695,12 @@
 						</code></pre>
           </section>
           <section>
+						<pre><code class="scala" data-trim>
+              val aGoodOne: Int Or String = Good(1)
+              aGoodOne.accumulating // Int Or One[String]
+						</code></pre>
+          </section>
+          <section>
             withFilter est défini via Validation :
             <pre><code class="scala" data-trim>
               def greaterThan0(i: Int): Validation[String] =
@@ -737,7 +743,6 @@
               des Bad avec des Left qui seraient des valeurs métier.
 						</aside>
           </section>
-          <!-- TODO .accumulating ? -->
           <section>
             En parlant de tuyauterie :
             <pre><code class="scala" data-trim>
