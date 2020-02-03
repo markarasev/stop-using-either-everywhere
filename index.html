@@ -460,7 +460,7 @@
 							<li class="fragment">erreurs à droite</li>
 						</ul>
 						<aside class="notes">
-							ne respecte pas la convention (principle of least surprise)
+							ne respecte pas la convention
 						</aside>
 					</section>
 					<section>
@@ -719,22 +719,51 @@
 						</aside>
           </section>
 					<section>
-						<h3>Autres avantages sur Either</h3>
-						<ul>
-							<li>pas de différences entre les versions de Scala</li>
-						</ul>
-						<aside class="notes">
-						</aside>
+            pas de différences entre les versions de Scala
 					</section>
 					<section>
-						<h3>Inconvénients</h3>
-					</section>
+            <h3>Inconvénients de Or 1/x</h3>
+              la tuyauterie...
+              <pre><code class="scala" data-trim>
+                Or.from(Right(1)) // Good(1)
+                Or.from(Left("error")) // Bad("error")
+
+                Good(1).toEither // Right(1)
+                Bad("error").toEither // Left("error")
+              </code></pre>
+						<aside class="notes">
+              Mais quelque-part, devoir faire de la tuyauterie c'est la garantie 
+              de ne pas mélanger les choux et les carottes, i.e. de ne pas mélanger 
+              des Bad avec des Left qui seraient des valeurs métier.
+						</aside>
+          </section>
+          <!-- TODO .accumulating ? -->
+          <section>
+            En parlant de tuyauterie :
+            <pre><code class="scala" data-trim>
+              Or.from(aTry) 
+              Or.from(option, orElse)
+              
+              or.toOption
+              or.toSeq
+              or.toTry
+            </code></pre>
+          </section>
+          <section>
+            <h3>Inconvénients de Or 2/x</h3>
+            Erreurs à droite -> principle of least surprise bafoué
+            <!-- TODO spacing -->
+            (cats.Validated, ZIO et certainement d'autres respectent la convention)
+						<aside class="notes">
+              Ne respecte pas la convention (principle of least surprise).
+              Pose des problèmes aux collègues en cours d'appropriation de la 
+              librairie dans une base de code en cours de migration.
+						</aside>
+          </section>
 				</section>
 
-				<!-- avantages / inconvénients (tuyauterie [mais c'est la garantie de ne 
-					pas faire n'importe quoi ?], meaningful type over convention, 
-					Every > cats.Nel, limitations: see TRM code [??], aurait 
-					pu respecter la convention, ...) -->
+				<!-- avantages / inconvénients, meaningful type over convention, 
+          Every > cats.Nel, limitations: see TRM code [??], ...) -->
 				<!-- new Sclactic NonEmptyCols -->
 				<!-- tout un tas d'anyvals (PosInt, NegInt, NonEmptyList) surtout depuis 
 					la 3.1.0 avec lesquelles je n'ai pas essayé de jouer mais je devrais -->
