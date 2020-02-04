@@ -381,20 +381,20 @@
 					<section>
 						<h3>Traverse</h3>
 						<pre><code class="scala" data-trim>
-							val eitherList: List[Either[CannotRetireError, Pensioner]] =
-							  Left(TooYoung) :: Right(marc) :: Left(DidNotWorkedEnough)
+							val eithers: List[Either[CannotRetireError, Pensioner]] =
+							  Left(TooYoung) :: Right(marc) :: Left(DidNotWorkedEnough) :: Nil
 
-							val listEither: Either[List[CannotRetireError], List[Pensioner]] = ???
+							val todo: Either[List[CannotRetireError], List[Pensioner]] = ???
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-						  val eitherList: List[Either[List[CannotRetireError], Pensioner]] = 
+						  val eithers: List[Either[List[CannotRetireError], Pensioner]] = 
 						    List(
 						      Left(TooYoung :: DidNotWorkedEnough),
 						      Right(marc),
 						      Left(TooYoung :: Nil)
 						    )
 
-						  val listEither: Either[List[CannotRetireError], List[Pensioner]] = ???
+						  val todo: Either[List[CannotRetireError], List[Pensioner]] = ???
 						</code></pre>
 						<p class="fragment">Qui a envie d'écrire ce code ?</p>
 						<aside class="notes">
@@ -699,6 +699,32 @@
               val aGoodOne: Int Or String = Good(1)
               aGoodOne.accumulating // Int Or One[String]
 						</code></pre>
+          </section>
+          <section>
+						<h3>Traverse</h3>
+						<pre><code class="scala" data-trim>
+              val ors: List[Pensioner Or CannotRetireError] =
+                Bad(TooYoung) :: Good(marc) :: Bad(DidNotWorkedEnough) :: Nil
+
+              val accumulatingOrs: List[Pensioner Or One[CannotRetireError]] = 
+                ors.map(_.accumulating)
+                
+              val pensionersOrErrors: List[Pensioner] Or Every[CannotRetireError] =
+                accumulatingOrs.combined // needs import org.scalactic.Accumulation._
+						</code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
+              val ors: List[Pensioner Or Every[CannotRetireError]] = List(
+                Bad(Many(TooYoung, DidNotWorkedEnough)),
+                Good(marc),
+                Bad(One(TooYoung))
+              )
+
+              val pensionersOrErrors: List[Pensioner] Or Every[CannotRetireError] = 
+                ors.combined // needs import org.scalactic.Accumulation._
+						</code></pre>
+						<aside class="notes">
+              La subtilité c'est qu'il faut être sur des ors accumulatifs.
+						</aside>
           </section>
           <section>
             withFilter est défini via Validation :
