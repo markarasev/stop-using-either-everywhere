@@ -584,6 +584,9 @@
 						</aside>
           </section>
 					<section>
+            pas de différences entre les versions de Scala
+          </section>
+					<section>
             <h3>Inconvénients de Or 1/2</h3>
               la tuyauterie...
               <pre><code class="scala" data-trim>
@@ -835,13 +838,31 @@
               Ou alors je n'ai pas trouvé comment faire.
 						</aside>
           </section>
-					<section>
-            pas de différences entre les versions de Scala
+
+          <!-- 5.5. Divers Scalactic -->
+          <section>
+            <h3>Every VS cats.NonEmptyList</h3>
+            <ul>
+              <li class="fragment">
+                conversion implicite vers IndexedSeq<br/>
+                => meilleure intégration avec la STL (et oui !)
+              </li>
+              <li class="fragment">scalactic.NonEmptyList (anciennement Chain)</li>
+            </ul>
+						<aside class="notes">
+              Très subjectif.
+
+              Meilleure intégration à l'usage avec la librairie standard tandis 
+              que cats.NEL est plus pensée pour s'intégrer avec les autres collections 
+              de cats.
+
+              Every backé par un Vector (IndexedSeq), NonEmptyList par une List 
+              comme cats (dispose aussi d'une conversion implicite).
+						</aside>
           </section>
 
 				</section>
 
-				<!-- avantages / inconvénients, Every > cats.Nel, ...) -->
 				<!-- new Sclactic NonEmptyCols -->
 				<!-- tout un tas d'anyvals (PosInt, NegInt, NonEmptyList) surtout depuis 
 					la 3.1.0 avec lesquelles je n'ai pas essayé de jouer mais je devrais -->
