@@ -695,6 +695,32 @@
 						</code></pre>
           </section>
           <section>
+            <h3>Limitations 1/2</h3>
+            firstGood?
+            <pre><code class="scala" data-trim>
+              def resolveFile(inputFile: Path): List[Path] Or Every[InputError] = /*...*/
+              def resolveGlob(inputGlob: Path): List[Path] Or Every[InputError] = /*...*/
+
+              val pathsOrErrors: List[Path] Or Every[InputError] = 
+                firstGood(resolveFilePath(inputPath), resolveGlobPath(inputPath))
+            </code></pre>
+						<aside class="notes">
+              Validation supporte l'opérateur && mais pas ||. Ait dû implémenter 
+              une implicit class de Or avec une méthode whenOneOf.
+						</aside>
+          </section>
+          <section>
+            <h3>Limitations 2/2</h3>
+            Validation ||
+            <pre><code class="scala" data-trim>
+              def hasFrenchHeaders(file: File): Validation[DecodeError] = /*...*/
+              def hasEnglishHeaders(file: File): Validation[DecodeError] = /*...*/
+
+              Good(file).when(hasFrenchHeaders && hasEnglishHeaders) // OK
+              Good(file).when(hasFrenchHeaders || hasEnglishHeaders) // compile error
+            </code></pre>
+          </section>
+          <section>
 						<pre><code class="scala" data-trim>
               val aGoodOne: Int Or String = Good(1)
               aGoodOne.accumulating // Int Or One[String]
@@ -795,36 +821,9 @@
               librairie dans une base de code en cours de migration.
 						</aside>
           </section>
-          <section>
-            <h3>Limitations 1/x</h3>
-            firstGood?
-            <pre><code class="scala" data-trim>
-              def resolveFile(inputFile: Path): List[Path] Or Every[InputError] = /*...*/
-              def resolveGlob(inputGlob: Path): List[Path] Or Every[InputError] = /*...*/
-
-              val pathsOrErrors: List[Path] Or Every[InputError] = 
-                firstGood(resolveFilePath(inputPath), resolveGlobPath(inputPath))
-            </code></pre>
-						<aside class="notes">
-              Validation supporte l'opérateur && mais pas ||. Ait dû implémenter 
-              une implicit class de Or avec une méthode whenOneOf.
-						</aside>
-          </section>
-          <section>
-            <h3>Limitations 2/x</h3>
-            Validation ||
-            <pre><code class="scala" data-trim>
-              def hasFrenchHeaders(file: File): Validation[DecodeError] = /*...*/
-              def hasEnglishHeaders(file: File): Validation[DecodeError] = /*...*/
-
-              Good(file).when(hasFrenchHeaders && hasEnglishHeaders) // OK
-              Good(file).when(hasFrenchHeaders || hasEnglishHeaders) // compile error
-            </code></pre>
-          </section>
 				</section>
 
-				<!-- avantages / inconvénients, combine, meaningful type over convention, 
-          Every > cats.Nel, limitations: see TRM code [??], ...) -->
+				<!-- avantages / inconvénients, Every > cats.Nel, ...) -->
 				<!-- new Sclactic NonEmptyCols -->
 				<!-- tout un tas d'anyvals (PosInt, NegInt, NonEmptyList) surtout depuis 
 					la 3.1.0 avec lesquelles je n'ai pas essayé de jouer mais je devrais -->
