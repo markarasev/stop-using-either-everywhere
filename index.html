@@ -238,7 +238,9 @@
 				<section>
 					<section>
 						<h2>Pourquoi utiliser <mark>Either</mark> n'est pas toujours idéal ?</h2>
-					</section>
+          </section>
+          
+          <!-- 3.1. Ambiguïté -->
 					<section>
 						<!-- Trouver mieux comme titre ? -->
 						<h3>Le code est la montagne à gravir</h3>
@@ -291,7 +293,9 @@
 							du type Either. Donc mon avis est que s'appuyer uniquement sur une 
 							convention est insuffisant, car le type est trop général.
 						</aside>
-					</section>
+          </section>
+          
+          <!-- 3.2. Versions de Scala -->
 					<section>
 						<h3>Scala 2.11</h3>
 						<pre><code class="scala" data-trim>
@@ -334,7 +338,9 @@
 							Obligés d'avoir un objet MonadicEither vide en scala 2.12+ pour
 							cross-compiler du code en 2.11.
 						</aside>
-					</section>
+          </section>
+          
+          <!-- 3.3. Divers -->
 					<section>
 						<h3>Gardes</h3>
 						<pre><code class="scala" data-trim>
@@ -402,7 +408,8 @@
 							(si des gens répondent oui dire "Ça me rassure, je ne suis pas le 
 							seul à être masochiste.")
 						</aside>
-					</section>
+          </section>
+          
 				</section>
 
 
@@ -433,8 +440,12 @@
 					</section>
 				</section>
 
+
+
 				<!-- 5. Scalactic -->
 				<section>
+
+          <!-- 5.1. Généralités -->
 					<section>
 						<h2>Scalactic</h2>
 						<ul>
@@ -450,7 +461,9 @@
 							(315 -> 504 classes, 706 Ko -> 1,5 Mo)
 							- 3.1.0 sortie le 29/11 dernier
 						</aside>
-					</section>
+          </section>
+          
+          <!-- 5.2. Or -->
 					<section>
 						<h3>scalactic.Or</h3>
 						<ul>
@@ -569,7 +582,9 @@
 						<aside class="notes">
 							moins de doutes + détetion d'erreurs de programmation
 						</aside>
-					</section>
+          </section>
+          
+          <!-- 5.3. Accumulation -->
 					<section>
 						<h3>Notation infixe</h3>
 						<pre><code class="scala" data-trim>
@@ -752,6 +767,8 @@
               La subtilité c'est qu'il faut être sur des ors accumulatifs.
 						</aside>
           </section>
+
+          <!-- 5.4. Divers -->
           <section>
             withFilter est défini via Validation :
             <pre><code class="scala" data-trim>
@@ -782,7 +799,10 @@
           </section>
 					<section>
             pas de différences entre les versions de Scala
-					</section>
+          </section>
+          
+          <!-- 5.5. Inconvénients -->
+          <!-- Remonter juste après 5.1. ? -->
 					<section>
             <h3>Inconvénients de Or 1/x</h3>
               la tuyauterie...
@@ -821,6 +841,7 @@
               librairie dans une base de code en cours de migration.
 						</aside>
           </section>
+
 				</section>
 
 				<!-- avantages / inconvénients, Every > cats.Nel, ...) -->
@@ -853,7 +874,10 @@
 				<!-- liste d'exemples Either / Or / IO et demander à l'audience ce qu'elle 
 					en pense ? -->
 
-				<!-- comme d'hab, there is no silver bullet -->
+        <!-- comme d'hab, there is no silver bullet -->
+        
+
+        
 			</div>
 		</div>
 
