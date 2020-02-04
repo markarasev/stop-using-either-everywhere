@@ -1053,7 +1053,7 @@
               // thread pools
               val runtime = new zio.DefaultRuntime {}
 
-              // censément 1 seul appel dans le main
+              // en principe 1 seul appel unique dans le main
               runtime.unsafeRun(io) // 42
             </code></pre>
           </section>
@@ -1082,12 +1082,64 @@
             <h3>Tuyauterie</h3>
             <pre><code class="scala" data-trim>
               val io = IO.fromFuture(implicit ec => Future(1))
+              // IO.fromEither(...)
+              // IO.fromTry(...)
+              // IO.fromOption(...)
+              // IO.fromFunction(...)
 
               runtime.unsafeRunToFuture(io) // Future(Success(1))
+              runtime.unsafeRunSync(io).toEither // Right(1)
             </code></pre>
           </section>
           <section>
-            <h3>Divers</h3>
+            <h3>ZIO API</h3>
+            <pre><code class="scala" data-trim>
+              trait FileDownloadService {
+                def toHdfs(from: Url, auth: Auth): IO[DownloadError, HdfsPath]
+                def toS3(from: Url, auth: Auth): IO[DownloadError, S3Path]
+              }
+            </code></pre>
+          </section>
+          <section>
+            <h3>Pourquoi ne pas mettre du ZIO partout ?</h3>
+            <ul>
+              <li class="fragment">force l'utilisateur à faire du ZIO...</li>
+              <li class="fragment">
+                ...ou à avoir un zio.Runtime sous la main (coûteux)
+              </li>
+              <li class="fragment">
+                le type IO ne veut rien dire
+                <pre><code class="scala" data-trim>
+                  def retire(worker: Worker): IO[CannotRetireError, Pensioner]
+                </code></pre>
+              </li>
+            </ul>
+            <aside class="notes">
+              Demander à l'audience ?
+              C'est une des erreurs principales.
+              Peut-être que des IO monads plus génériques comme (cats.IO ?) permettent 
+              de contourner le problème de coût.
+              Le type IO n'a du sens que dans le main, ce qui est rarement le cas dans 
+              nos bases de code qui font du akka-stream, du Play ou du Slick, etc. 
+              où on introduit ZIO.
+              Probablement beaucoup plus troublant pour des gens non habitués à 
+              typer leurs erreurs que du Or ou du Either.
+              Donc à ne pas en abuser quitte à faire de la tuyauterie encore une fois.
+            </aside>
+          </section>
+          <section>
+            <h2>ZIO == BetterFuture (only)</h2>
+            <aside class="notes">
+              Mon cas d'usage à l'heure actuelle. Pour le canal d'erreurs.
+            </aside>
+          </section>
+          <section>
+            <h3>Divers ZIO</h3>
+            <ul>
+              <li class="fragment">withFilter OK</li>
+              <li class="fragment">accumulation KO</li>
+              <li class="fragment">traverse OK</li>
+            </ul>
             <aside class="notes">
               Beaucoup de choses à dire sur ZIO mais ce n'est pas le sujet de 
               cette présentation.
@@ -1095,25 +1147,28 @@
           </section>
         </section>
 
-				<!-- ZIO, avantages / inconvénients (requiert un zio.Runtime [threadpools], 
-					ou force l'utilisateur à faire du ZIO,
-					donc à ne pas en abuser quitte à faire de la tuyauterie en core une fois, 
-					peut-être que des IO monads plus génériques [comme cats.IO ?] permettent 
-					de contourner ce problème, cependant IO ne veut toujours rien dire [sauf 
-					si tout le main est dans une IO monad, ce qui est rarement le cas dans 
-					nos bases de code qui font du akka-stream, etc où on introduit ZIO]) 
-					en résumé = better Future (canal d'erreurs)
-				-->
-				<!-- how about IO[Every[Err], Res]? -->
-				<!-- revoir l'API avec ZIO, porblème de la compatibilité erreurs / 
-					exceptions ? -->
-				<!-- Option ? autres ? -->
 
-				<!-- liste d'exemples Either / Or / IO et demander à l'audience ce qu'elle 
-					en pense ? -->
 
-        <!-- comme d'hab, there is no silver bullet -->
-        
+        <section>
+          <h1>There is no silver bullet.</h1>
+          <aside class="notes">
+            Comme d'hab.
+          </aside>
+        </section>
+        <section>
+          <h2>Utilisez les types pour faire passer vos intentions !</h2>
+          <pre><code class="scala" data-trim>
+            def validateFile(file: File): Or[DataFile, UnexpectedFile]
+
+            def classifyFile(file: File): Either[SourceFile, BinaryFile]
+
+            def download(from: Url, auth: Auth): IO[DownloadError, Path]
+          </code></pre>
+        </section>
+        <section>
+          <h1>Merci !</h1>
+        </section>
+
 
 
 			</div>
