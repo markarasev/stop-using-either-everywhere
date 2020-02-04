@@ -417,7 +417,7 @@
 				<!-- 4. Alternatives pour la validation / gestion des erreurs -->
 				<section>
 					<section data-transition=none>
-						<h3>Validation</h3>
+						<h2>Validation</h2>
 						<ul>
 							<li>scalactic.Or</li>
 							<li>cats.Validated</li>
@@ -430,7 +430,7 @@
 						</aside>
 					</section>
 					<section data-transition=none>
-						<h3>Validation</h3>
+						<h2>Validation</h2>
 						<ul>
 							<li><mark>scalactic.Or</mark></li>
 							<li>cats.Validated</li>
@@ -878,6 +878,7 @@
 				
         <!-- cats.Validated ? -->
         
+        <!-- 6. Composition -->
         <section>
           <section>
             <h2>Composition de monades</h2>
@@ -945,10 +946,155 @@
           </section>
         </section>
 
-				<!-- partie 2 : composition avec d'autres monades -->
-				<!-- Monad transformer ? Naah. -->
-				<!-- liste de solutions (cats.IO, EitherT, ZIO), on ne parlera que de 
-					celles que je connais encore une fois -->
+
+
+				<!-- 7. Alternatives pour la composition / l'asynchronisme -->
+				<section>
+					<section data-transition=none>
+						<h2>Composition / Asynchronisme</h2>
+						<ul>
+							<li>Monad transformer maison</li>
+							<li>cats.EitherT (monad transformer)</li>
+							<li>cats.IO</li> <!-- à vérifier -->
+							<li>ZIO</li>
+							<li>...</li>
+							<!-- list more ? -->
+						</ul>
+						<aside class="notes">
+              Il existe aussi un paquet d'alternatives pour faire de la composition 
+              ou de l'asynchronisme avec des erreurs typéees, entre autres ...
+						</aside>
+					</section>
+					<section data-transition=none>
+						<h2>Composition / Asynchronisme</h2>
+						<ul>
+							<li><mark>Monad transformer maison</mark></li>
+							<li>cats.EitherT (monad transformer)</li>
+							<li>cats.IO</li> <!-- à vérifier -->
+							<li><mark>ZIO</mark></li>
+							<li>...</li>
+							<!-- list more ? -->
+						</ul>
+						<aside class="notes">
+							Là aussi, on va se concentrer sur celles que j'ai essayé.
+						</aside>
+					</section>
+        </section>
+        
+
+
+        <!-- 8. Monad transformer maison -->
+        <section>
+          <h2>FutureOr</h2>
+          <ul>
+            <li class="fragment">marrant 5 minutes</li>
+            <li class="fragment">filterEventually ? eventualFilter ? filter ?</li>
+            <li class="fragment">peu performant ?</li>
+            <li class="fragment">pas du code que vous voulez maintenir</li>
+          </ul>
+          <aside class="notes">
+            Facile pour map ete flatMap, le reste c'est moins drôle quand vous 
+            devez livrer.
+
+            Risque d'incompréhension des collègues.
+          </aside>
+        </section>
+
+        <!-- 9. ZIO -->
+        <section>
+          <section>
+            <h2>ZIO</h2>
+            <ul class="fragment">
+              <li>originaire de ScalaZ</li>
+              <li>programmation concurrente fonctionnelle et type-safe</li>
+              <li>IO monad</li>
+            </ul>
+            <aside class="notes">
+              On ne la présente plus.
+              Effect type / IO monad d'Haskell (pas vraiment important de 
+              comprendre tout ça pour l'utiliser en vrai).
+            </aside>
+          </section>
+          <section>
+            <h3>ZIO</h3>
+            <div class="fragment">
+              <pre><code class="scala" data-trim>
+                trait ZIO[R, E, A]
+              </code></pre>
+              <ul>
+                <li>R - environement</li>
+                <li>E - échec</li>
+                <li>A - succès</li>
+              </ul>
+            </div>
+            <aside class="notes">
+              R je ne maîtrise pas, injection de dépendances.
+            </aside>
+          </section>
+          <section>
+            <h3>IO</h3>
+            <pre><code class="scala" data-trim>
+              type IO[E, A] = ZIO[Any, E, A]
+            </code></pre>
+            <ul>
+              <li>E - échec</li>
+              <li>A - succès</li>
+            </ul>
+            <aside class="notes">
+              C'est exactement ce qu'on veut.
+              Erreur à gauche.
+            </aside>
+          </section>
+          <section>
+            <h3>Utilisation 1/3</h3>
+            <pre><code class="scala" data-trim>
+              val io = IO.succeed(21).map(_ * 2)
+
+              // thread pools
+              val runtime = new zio.DefaultRuntime {}
+
+              // censément 1 seul appel dans le main
+              runtime.unsafeRun(io) // 42
+            </code></pre>
+          </section>
+          <section>
+            <h3>Utilisation 2/3</h3>
+            <pre><code class="scala" data-trim>
+              val io = IO.fail("No no!").mapError(_.toUppercase)
+
+              runtime.unsafeRun(io) // ~ throw new Exception("NO NO!")
+            </code></pre>
+          </section>
+          <section>
+            <h3>Utilisation 3/3</h3>
+            <pre><code class="scala" data-trim>
+              val io = for {
+                i <- IO.succeed(21)
+                _ <- IO.fail("No no!")
+              } yield i
+
+              val io2 = io.map(_ * 2).mapError(_.toUppercase)
+
+              runtime.unsafeRun(io2) // throw new Exception("NO NO!")
+            </code></pre>
+          </section>
+          <section>
+            <h3>Tuyauterie</h3>
+            <pre><code class="scala" data-trim>
+              val io = IO.fromFuture(implicit ec => Future(1))
+
+              runtime.unsafeRunToFuture(io) // Future(Success(1))
+            </code></pre>
+          </section>
+          <section>
+            <h3>Divers</h3>
+            <aside class="notes">
+              Beaucoup de choses à dire sur ZIO mais ce n'est pas le sujet de 
+              cette présentation.
+            </aside>
+          </section>
+        </section>
+
 				<!-- ZIO, avantages / inconvénients (requiert un zio.Runtime [threadpools], 
 					ou force l'utilisateur à faire du ZIO,
 					donc à ne pas en abuser quitte à faire de la tuyauterie en core une fois, 
