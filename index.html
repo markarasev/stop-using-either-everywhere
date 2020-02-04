@@ -583,6 +583,44 @@
 							moins de doutes + détetion d'erreurs de programmation
 						</aside>
           </section>
+					<section>
+            <h3>Inconvénients de Or 1/2</h3>
+              la tuyauterie...
+              <pre><code class="scala" data-trim>
+                Or.from(Right(1)) // Good(1)
+                Or.from(Left("error")) // Bad("error")
+
+                Good(1).toEither // Right(1)
+                Bad("error").toEither // Left("error")
+              </code></pre>
+						<aside class="notes">
+              Mais quelque-part, devoir faire de la tuyauterie c'est la garantie 
+              de ne pas mélanger les choux et les carottes, i.e. de ne pas mélanger 
+              des Bad avec des Left qui seraient des valeurs métier.
+						</aside>
+          </section>
+          <section>
+            En parlant de tuyauterie :
+            <pre><code class="scala" data-trim>
+              Or.from(aTry) 
+              Or.from(option, orElse)
+              
+              or.toOption
+              or.toSeq
+              or.toTry
+            </code></pre>
+          </section>
+          <section>
+            <h3>Inconvénients de Or 2/2</h3>
+            Erreurs à droite -> principle of least surprise bafoué
+            <!-- TODO spacing -->
+            (cats.Validated, ZIO et certainement d'autres respectent la convention)
+						<aside class="notes">
+              Ne respecte pas la convention (principle of least surprise).
+              Pose des problèmes aux collègues en cours d'appropriation de la 
+              librairie dans une base de code en cours de migration.
+						</aside>
+          </section>
           
           <!-- 5.3. Accumulation -->
 					<section>
@@ -800,47 +838,6 @@
 					<section>
             pas de différences entre les versions de Scala
           </section>
-          
-          <!-- 5.5. Inconvénients -->
-          <!-- Remonter juste après 5.1. ? -->
-					<section>
-            <h3>Inconvénients de Or 1/x</h3>
-              la tuyauterie...
-              <pre><code class="scala" data-trim>
-                Or.from(Right(1)) // Good(1)
-                Or.from(Left("error")) // Bad("error")
-
-                Good(1).toEither // Right(1)
-                Bad("error").toEither // Left("error")
-              </code></pre>
-						<aside class="notes">
-              Mais quelque-part, devoir faire de la tuyauterie c'est la garantie 
-              de ne pas mélanger les choux et les carottes, i.e. de ne pas mélanger 
-              des Bad avec des Left qui seraient des valeurs métier.
-						</aside>
-          </section>
-          <section>
-            En parlant de tuyauterie :
-            <pre><code class="scala" data-trim>
-              Or.from(aTry) 
-              Or.from(option, orElse)
-              
-              or.toOption
-              or.toSeq
-              or.toTry
-            </code></pre>
-          </section>
-          <section>
-            <h3>Inconvénients de Or 2/x</h3>
-            Erreurs à droite -> principle of least surprise bafoué
-            <!-- TODO spacing -->
-            (cats.Validated, ZIO et certainement d'autres respectent la convention)
-						<aside class="notes">
-              Ne respecte pas la convention (principle of least surprise).
-              Pose des problèmes aux collègues en cours d'appropriation de la 
-              librairie dans une base de code en cours de migration.
-						</aside>
-          </section>
 
 				</section>
 
@@ -877,7 +874,7 @@
         <!-- comme d'hab, there is no silver bullet -->
         
 
-        
+
 			</div>
 		</div>
 
