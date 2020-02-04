@@ -876,11 +876,76 @@
 
 				</section>
 				
-				<!-- bosser cats.Validated ? -->
+        <!-- cats.Validated ? -->
+        
+        <section>
+          <section>
+            <h2>Composition de monades</h2>
+          </section>
+          <section>
+            <h3>API</h3>
+            <pre><code class="scala" data-trim>
+              trait FileDownloadService {
+                def toHdfs(from: Url, auth: Auth): HdfsPath Or DownloadError
+                def toS3(from: Url, auth: Auth): Either[DownloadError, S3Path]
+              }
+              
+              sealed trait DownloadError
+              case class GetFailed(code: StatusCode) extends DownloadError
+              case object GotHtml extends DownloadError
+            </code></pre>
+						<aside class="notes">
+              Que vous utilisiez Either ou Or, vous aimez bien typer vos erreurs 
+              métiers.
+              Ces erreurs peuvent servir à renvoyer des messages précis à 
+              l'utilisateur ou à réagir en fonction.
+              On ne télécharge pas des HTML. Si on en obtient, c'est qu'on s'est 
+              trompé d'Url.
+						</aside>
+          </section>
+          <section>
+            <h3>Asynchronisme</h3>
+            <pre><code class="scala" data-trim>
+              trait FileDownloadService {
+                def toHdfs(from: Url, auth: Auth): Future[HdfsPath Or DownloadError]
+                def toS3(from: Url, auth: Auth): Future[Either[DownloadError, S3Path]]
+              }
+            </code></pre>
+						<aside class="notes">
+              Vu qu'on va faire une requête HTTP et écrire sur un système de fichier
+              distant, il paraît légitime de vouloir en faire un traitement asynchrone
+						</aside>
+          </section>
+          <section>
+            <h3>Problèmes</h3>
+            <ul>
+              <li class="fragment">
+                accès compliqué au résultat
+                <pre><code class="scala" data-trim>
+                  download.toS3(someUrl, someAuth)
+                    .map(_.foreach { s3Path => /*...*/ } )
+                </code></pre>
+              </li>
+              <li class="fragment">
+                double canal d'erreur
+                <pre><code class="scala" data-trim>
+                  download.toS3(someUrl, someAuth) 
+                  // Future(Failure(java.lang.Exception))
+                  // Future(Success(Bad(GotHtml)))
+                </code></pre>
+              </li>
+            </ul>
+						<aside class="notes">
+              Tuyauterie permanente au lieu d'être limitée aux frontières de 
+              l'utilisation de certains types.
+
+              Les canaux d'erreurs sont trois en réalité avec le lancement 
+              d'exceptions en dehors de la Future.
+						</aside>
+          </section>
+        </section>
 
 				<!-- partie 2 : composition avec d'autres monades -->
-				<!-- problème de l'API asynchrone avec gestion des erreurs (proposer une 
-					API exemple) : Future[Either], Future[Or], même combat -->
 				<!-- Monad transformer ? Naah. -->
 				<!-- liste de solutions (cats.IO, EitherT, ZIO), on ne parlera que de 
 					celles que je connais encore une fois -->
