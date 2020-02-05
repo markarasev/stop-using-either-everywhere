@@ -302,7 +302,7 @@
 							// error: value withFilter is not a member of Right[Double,Int]
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							for (x: Int <- right1) yield x
+							for (x: Int <- Right(1)) yield x
 							// error: value withFilter is not a member of Right[Double,Int]
 						</code></pre>
 						<aside class="notes">
@@ -571,7 +571,7 @@
 						</aside>
 					</section>
 					<section>
-						<h3>Every</h3>
+						<h3>scalactic.Every</h3>
 						<pre><code class="scala" data-trim>
 							One("Too young.") // Every[String]
 							
@@ -670,7 +670,7 @@
 							  if (worker.workedQuarters >= 172) Pass else Fail(DidNotWorkedEnough)
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							def retire(worker: Worker): Or[Pensioner, Every[CannotRetireError]] = 
+							def retire(worker: Worker): Pensioner Or Every[CannotRetireError] = 
 							  Good(worker).when(isOldEnough, hasWorkedEnough).map(Pensioner.apply)
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
@@ -766,7 +766,7 @@
 
           <!-- 5.5. Divers Scalactic -->
           <section>
-            <h3><code>Every</code> VS <code>cats.NonEmptyList</code></h3>
+            <h3>Every VS cats.NonEmptyList</h3>
             <ul>
               <li class="fragment">
                 conversion implicite vers IndexedSeq<br/>
