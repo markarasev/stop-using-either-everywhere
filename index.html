@@ -37,12 +37,10 @@
 				<section>
 					<h1>Stop using <code class="bg">Either</code> everywhere!</h1>
 					<aside class="notes">
-						Type dont je trouve l'usage abusif dans beaucoup de bases de code. Je 
-						vais tenter d'expliquer pourquoi je pense comme ça, et quelles 
-						alternatives j'ai pu trouver.
-						Sujet à débat, je vais donner beaucoup d'avis personnels. Si vous n'êtes
-						pas d'accord, c'est normal. Cela dit, tout se dont je vais parler ici 
-						est inspiré de faits réels, issus de mon expérience de développeur.
+            type usage abusif<br/>
+            pourquoi ? alternatives ?<br/> 
+						Sujet à débat, avis personnels, pas d'accord -> normal<br/>
+            inspiré de faits réels, mon expérience
 					</aside>
 				</section>
 
@@ -54,7 +52,7 @@
 						<h2>Quelques exemples d'utilisation</h2>
 						À vous de me donner l'intention de l'auteur.
 						<aside class="notes">
-							chaque mauvaise réponse = une présentation au SLUG
+							chaque mauvaise réponse = une présentation au SLUG<br/>
 							(ya pas de mauvaises réponses)
 						</aside>
 					</section>
@@ -68,8 +66,7 @@
 							<li class="fragment">DataFile est l'entrée validée</li>
 						</ul>
 						<aside class="notes">
-							convention : erreurs à gauche (merci pour les gauchers), résultats 
-							corrects à droite
+							convention : erreurs à gauche
 						</aside>
 					</section>
 					<section>
@@ -124,8 +121,7 @@
 							</li>
 						</ul>
 						<aside class="notes">
-							Ça, c'est du code que j'ai écrit. Si un jour tu tombes dessus Sylvain, 
-							tu seras prévenu.
+							code que j'ai écrit, poke @Sylvain
 						</aside>
 					</section>
 				</section>
@@ -156,8 +152,7 @@
 							</code></pre></li>
 						</ul>
 						<aside class="notes">
-							Pourquoi ya autant de noms pour désigner la même chose ? Je ne sais 
-							pas, demandez aux scientifiques.
+							Pourquoi beaucoup de noms ? Demandez aux scientifiques.
 						</aside>
 					</section>
 					<section>
@@ -193,17 +188,8 @@
 							</code></pre></li>
 						</ul>
 						<aside class="notes">
-							Oui mais Marc, pourquoi tu fais pas une sealed family 
-							(et on garderait Either pour la gestion d'erreurs) ? 
-
-							 - Pour le retour d'une seule fonction, c'est peut-être overkill.
-
-							 - Peut-être que j'ai pas la main sur les définitions des types 
-							SourceFile et BinaryFile et qu'elles se trouvent dans des 
-							dépendances externes. Les wrapper dans une sealed family reviendrait à 
-							faire exactement la même chose qu'Either. Et même, ça serait 
-							potentiellement très rébarbatif si je devais faire une sealed family 
-							par couple que je souhaite retourner à chaque fonction.
+							 - retour d'une seule fonction -> overkill<br/>
+							 - wrapper dans une sealed family = Either / rébarbatif
 						</aside>
 					</section>
 				</section>
@@ -238,11 +224,6 @@
             </ul>
 						<p class="fragment">Or la combinaison de la définition d'Either et 
 							son usage conventionnel créent de l'ambiguïté.</p>
-						<!-- insérer GIF ? peut-être 
-							https://giphy.com/gifs/filmeditor-christmas-movies-vanessa-ferlito-3o6wrFfkrw1xEk35VS ? -->
-						<aside class="notes">
-							Les types sont aussi là pour nous aider dans cette tâche (en principe).
-						</aside>
 					</section>
 					<section>
 						<h3>Either est trop général</h3>
@@ -263,10 +244,8 @@
 							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
 						</code></pre>
 						<aside class="notes">
-							<!-- devant les multiples cas d'usages d'Either -->
-							Si on reprend nos exemples de départ, aucun n'est vraiment un mésusage 
-							du type Either. Donc mon avis est que s'appuyer uniquement sur une 
-							convention est insuffisant, car le type est trop général.
+							aucun mésusage d'Either<br/>
+							convention insuffisante
 						</aside>
           </section>
           
@@ -292,9 +271,8 @@
 							Right(1).flapMap(Left("Error"))
 						</code></pre>
 						<aside class="notes">
-							Qui utilise encore scala 2.11 ? Nous mais chut.
-							On copie-colle du code, mais aimerait faire autre chose de notre 
-							temps et éviter de maintenir ce code, même si il y a peu de risques.
+							Qui utilise encore scala 2.11 ? Nous mais chut.<br/>
+							code copié-collé, mais autre chose à faire
 						</aside>
 					</section>
 					<section>
@@ -309,10 +287,6 @@
 
 							Right(1).flapMap(Left("Error"))
 						</code></pre>
-						<aside class="notes">
-							Obligés d'avoir un objet MonadicEither vide en scala 2.12+ pour
-							cross-compiler du code en 2.11.
-						</aside>
           </section>
           
           <!-- 3.3. Divers -->
@@ -333,8 +307,6 @@
 						</code></pre>
 						<aside class="notes">
 							Demander à l'audience ce qu'il se passe pour le premier exemple.
-							
-							Les "refutable-patterns" ne fonctionnent pas non plus.
 						</aside>
 					</section>
 					<section>
@@ -353,10 +325,8 @@
 							retire(marc) // Left(List(DidNotWorkedEnough, TooYoung))
 						</code></pre>
 						<aside class="notes">
-							On est tout nu pour faire de l'accumulation, obligé de faire du 
-							mutable.
-							Ah, et ça serait bien d'avoir un type de liste non vide pour les 
-							erreurs.
+              tout nu pour faire de l'accumulation -> mutable<br/>
+              liste non vide pour les erreurs ?
 						</aside>
 					</section>
 					<section>
@@ -373,8 +343,8 @@
 						</code></pre>
 						<p class="fragment">Qui a envie d'écrire ce code ?</p>
 						<aside class="notes">
-							(si des gens répondent oui dire "Ça me rassure, je ne suis pas le 
-							seul à être masochiste.")
+              "Ça me rassure, je ne suis pas le seul à être masochiste."<br/>
+              "Moi, mais je suis un peu maso."
 						</aside>
           </section>
           
@@ -392,10 +362,6 @@
 							<li><code>scalaz.Validation</code></li>
 							<li>...</li>
 						</ul>
-						<aside class="notes">
-							Il existe un paquet de libs pour faire de la validation, entre autres ...
-							On va se concentrer sur celle que je connais, scalactic.
-						</aside>
 					</section>
 					<section data-transition=none>
 						<h2>Validation</h2>
@@ -423,10 +389,9 @@
 							<li class="fragment">développement actif</li>
 						</ul>
 						<aside class="notes">
-							- (donc déjà dans ton scope de test si tu utilises Scalatest)
-							- petite librairie (cats-core 2.1.0 : 2072 classes 4,7 Mo) mais plus 
-							tellement : a doublé de volume entre la 3.0.8 et la 3.1.0 
-							(315 -> 504 classes, 706 Ko -> 1,5 Mo)
+							- (donc déjà dans ton scope de test si tu utilises Scalatest)<br/>
+              - cats-core 2.1.0 : 2072 classes 4,7 Mo<br/>
+              - a doublé de volume entre la 3.0.8 et la 3.1.0<br/>
 							- 3.1.0 sortie le 29/11 dernier
 						</aside>
           </section>
@@ -446,9 +411,6 @@
               </li>
 							<li class="fragment">erreurs à droite</li>
 						</ul>
-						<aside class="notes">
-							ne respecte pas la convention
-						</aside>
 					</section>
 					<section>
             <h3>Utilisation identique...</h3>
@@ -465,9 +427,6 @@
 							} yield x + y // Bad("Error")
             </code></pre>
             <h3>...mais différence sémantique.</h3>
-						<aside class="notes">
-							Les types Good et Bad portent une sémantique contrairement à Left et Right.
-						</aside>
 					</section>
 					<section>
 						<pre><code class="scala" data-trim>
@@ -477,11 +436,11 @@
 						<pre class="fragment"><code class="scala" data-trim>
 							def validateFile(file: File): Or[DataFile, FileValidationError]
             </code></pre>
-            <p class="fragment">validation</ul>
+            <p class="fragment">validation</p>
+            <aside class="notes">
+              Interroger l'audience (on recommence l'exercice mais avec Or).
+            </aside>
 					</section>
-          <aside class="notes">
-            Interroger l'audience (on recommence l'exercice mais avec Or).
-          </aside>
 					<section>
 						<pre><code class="scala" data-trim>
 							// catégorisation
@@ -573,9 +532,7 @@
                 Bad("error").toEither // Left("error")
               </code></pre>
 						<aside class="notes">
-              Mais quelque-part, devoir faire de la tuyauterie c'est la garantie 
-              de ne pas mélanger les choux et les carottes, i.e. de ne pas mélanger 
-              des Bad avec des Left qui seraient des valeurs métier.
+              tuyauterie ~= garantie de ne pas mélanger des Bad avec des Left métiers
 						</aside>
           </section>
           <section>
@@ -595,7 +552,6 @@
             <br/><br/>
             (cats, scalaz, ZIO, ... respectent la convention)
 						<aside class="notes">
-              Ne respecte pas la convention (principle of least surprise).
               Pose des problèmes aux collègues en cours d'appropriation de la 
               librairie dans une base de code en cours de migration.
 						</aside>
@@ -669,10 +625,7 @@
 							  }
 						</code></pre>
 						<aside class="notes">
-							Scalactic offre plusieurs moyens de faire de l'accumulation d'erreurs. 
-
-							Notation infixe (j'aime bien pour limiter les []).
-
+							Scalactic offre plusieurs moyens de faire de l'accumulation d'erreurs.<br/>
 							Exemple de la doc.
 						</aside>
 					</section>
@@ -751,8 +704,7 @@
               hasFrenchHeaders(file) || hasEnglishHeaders(file) // compile error
             </code></pre>
 						<aside class="notes">
-              Validation supporte l'opérateur && mais pas ||. Ait dû implémenter 
-              une implicit class de Or avec une méthode whenOneOf.
+              Ait dû implémenter une implicit class de Or avec une méthode whenOneOf.
 						</aside>
           </section>
           <section>
@@ -814,7 +766,7 @@
 
           <!-- 5.5. Divers Scalactic -->
           <section>
-            <h3>Every VS cats.NonEmptyList</h3>
+            <h3><code>Every</code> VS <code>cats.NonEmptyList</code></h3>
             <ul>
               <li class="fragment">
                 conversion implicite vers IndexedSeq<br/>
@@ -823,14 +775,11 @@
               <li class="fragment">scalactic.NonEmptyList (anciennement Chain)</li>
             </ul>
 						<aside class="notes">
-              Très subjectif.
-
-              Meilleure intégration à l'usage avec la librairie standard tandis 
-              que cats.NEL est plus pensée pour s'intégrer avec les autres collections 
-              de cats.
-
+              Très subjectif.<br/><br/>
+              Meilleure intégration à l'usage avec la STL.
+              cats.NEL est pensée intégration avec les autres collections cats<br/><br/>
               Every backé par un Vector (IndexedSeq), NonEmptyList par une List 
-              comme cats (dispose aussi d'une conversion implicite).
+              comme cats (conversion implicite aussi).
 						</aside>
           </section>
           <section>
@@ -842,8 +791,7 @@
               <li>...</li>
             </ul>
 						<aside class="notes">
-              Tout un tas d'AnyVals, surtout depuis la 3.1.0 avec lesquelles je 
-              n'ai pas encore essayé de jouer mais je devrais.
+              surtout depuis la 3.1.0, pas encore essayé mais je devrais
 						</aside>
           </section>
 
@@ -870,9 +818,9 @@
             </code></pre>
 						<aside class="notes">
               Que vous utilisiez Either ou Or, vous aimez bien typer vos erreurs 
-              métiers.
+              métiers.<br/><br/>
               Ces erreurs peuvent servir à renvoyer des messages précis à 
-              l'utilisateur ou à réagir en fonction.
+              l'utilisateur ou à réagir en fonction.<br/><br/>
               On ne télécharge pas des HTML. Si on en obtient, c'est qu'on s'est 
               trompé d'Url.
 						</aside>
@@ -886,8 +834,7 @@
               }
             </code></pre>
 						<aside class="notes">
-              Vu qu'on va faire une requête HTTP et écrire sur un système de fichier
-              distant, il paraît légitime de vouloir en faire un traitement asynchrone.
+              requête HTTP + écriture FS distant => asynchronisme légitime
 						</aside>
           </section>
           <section>
@@ -910,9 +857,7 @@
               </li>
             </ul>
 						<aside class="notes">
-              Tuyauterie permanente au lieu d'être limitée aux frontières de 
-              l'utilisation de certains types.
-
+              tuyauterie permanente<br/><br/>
               Les canaux d'erreurs sont trois en réalité avec le lancement 
               d'exceptions en dehors de la Future.
 						</aside>
@@ -931,10 +876,6 @@
 							<li><code>ZIO</code></li>
 							<li>...</li>
 						</ul>
-						<aside class="notes">
-              Il existe aussi un paquet d'alternatives pour faire de la composition 
-              ou de l'asynchronisme avec des erreurs typéees, entre autres ...
-						</aside>
 					</section>
 					<section data-transition=none>
 						<h2>Composition / Asynchronisme</h2>
@@ -944,9 +885,6 @@
 							<li><mark><code>ZIO</code></mark></li>
 							<li>...</li>
 						</ul>
-						<aside class="notes">
-							Là aussi, on va se concentrer sur celles que j'ai essayé.
-						</aside>
 					</section>
         </section>
         
@@ -958,13 +896,11 @@
           <ul>
             <li class="fragment">marrant 5 minutes</li>
             <li class="fragment">filterEventually ? eventualFilter ? filter ?</li>
-            <li class="fragment">peu performant ?</li>
             <li class="fragment">pas du code que vous voulez maintenir</li>
           </ul>
           <aside class="notes">
-            Facile pour map ete flatMap, le reste c'est moins drôle quand vous 
-            devez livrer.
-
+            Facile pour map et flatMap, le reste c'est moins drôle quand vous 
+            devez livrer.<br/><br/>
             Risque d'incompréhension des collègues.
           </aside>
         </section>
@@ -979,9 +915,9 @@
               <li>IO monad</li>
             </ul>
             <aside class="notes">
-              On ne la présente plus.
+              On ne la présente plus.<br/>
               Effect type / IO monad d'Haskell (pas vraiment important de 
-              comprendre tout ça pour l'utiliser en vrai).
+              comprendre).
             </aside>
           </section>
           <section>
@@ -1010,7 +946,7 @@
               <li>A - succès</li>
             </ul>
             <aside class="notes">
-              C'est exactement ce qu'on veut.
+              C'est exactement ce qu'on veut.<br/>
               Erreur à gauche.
             </aside>
           </section>
@@ -1084,14 +1020,12 @@
               </li>
             </ul>
             <aside class="notes">
-              Demander à l'audience ?
-              C'est une des erreurs principales.
-              Le type IO n'a du sens que dans le main, ce qui est rarement le cas dans 
-              nos bases de code qui font du akka-stream, du Play ou du Slick, etc. 
-              où on introduit ZIO.
-              Probablement beaucoup plus troublant pour des gens non habitués à 
-              typer leurs erreurs que du Or ou du Either.
-              Donc à ne pas en abuser quitte à faire de la tuyauterie encore une fois.
+              Interroger l'audience.<br/>
+              C'est une des erreurs principales.<br/>
+              Le type IO n'a du sens que dans le main, pas le cas dans les 
+              projets où on introduit ZIO.<br/>
+              Plus troublant pour des gens non habitués à typer leurs erreurs.<br/>
+              Mieux vaut faire de la tuyauterie.
             </aside>
           </section>
           <section>
