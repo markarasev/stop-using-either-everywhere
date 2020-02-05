@@ -35,7 +35,7 @@
 
 				<!-- Titre -->
 				<section>
-					<h1>Stop using <mark>Either</mark> everywhere!</h1>
+					<h1>Stop using <code class="bg">Either</code> everywhere!</h1>
 					<aside class="notes">
 						Type dont je trouve l'usage abusif dans beaucoup de bases de code. Je 
 						vais tenter d'expliquer pourquoi je pense comme ça, et quelles 
@@ -61,9 +61,8 @@
 					<section>
 						<pre><code class="scala" data-trim>
 							def validateFile(file: File): Either[FileValidationError, DataFile]
-						</code></pre>
+            </code></pre>
 						<ul>
-							<!-- augmenter l'espacement entre les lignes ? -->
 							<li class="fragment">validation</li>
 							<li class="fragment">FileValidationError est une erreur métier</li>
 							<li class="fragment">DataFile est l'entrée validée</li>
@@ -73,28 +72,11 @@
 							corrects à droite
 						</aside>
 					</section>
-					<!-- Pas sûr que ce soit franchement nécessaire à ce stade. C'est bien 
-					pour l'exhaustivité mais risque de perdre de vue l'objectif de montrer 
-					l'ambiguïté. -->
-					<!-- <section>
-						<pre><code class="scala" data-trim>
-							def decodeFile(file: File): Either[FileDecodingError, DecodedFile]
-						</code></pre>
-						<ul> -->
-							<!-- augmenter l'espacement entre les lignes ? -->
-							<!-- <li class="fragment">traitement</li>
-							<li class="fragment">FileDecodingError est une erreur de traitement</li>
-							<li class="fragment">DecodedFile est le résultat du traitement</li>
-						</ul>
-						<aside class="notes">
-						</aside>
-					</section> -->
 					<section>
 						<pre><code class="scala" data-trim>
 							def classifyFile(file: File): Either[SourceFile, BinaryFile]
 						</code></pre>
 						<ul>
-							<!-- augmenter l'espacement entre les lignes ? -->
 							<li class="fragment">catégorisation</li>
 							<li class="fragment">BinaryFile est une entrée métier à traiter</li>
 							<li class="fragment">SourceFile aussi</li>
@@ -108,7 +90,6 @@
 							def validateFile(file: File): Either[UnexpectedFile, DataFile]
 						</code></pre>
 						<ul>
-							<!-- augmenter l'espacement entre les lignes ? -->
 							<li class="fragment">validation</li>
 							<li class="fragment">DataFile est l'entrée validée</li>
 							<li class="fragment">
@@ -122,7 +103,6 @@
 							def classifyFile(file: File): Either[UnexpectedFile, DataFile]
 						</code></pre>
 						<ul>
-							<!-- augmenter l'espacement entre les lignes ? -->
 							<li class="fragment">DataFile est une entrée métier à traiter</li>
 							<li class="fragment">
 								UnexpectedFile ressemble à une erreur mais en est-ce une vraiment ?
@@ -135,7 +115,6 @@
 							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
 						</code></pre>
 						<ul>
-							<!-- augmenter l'espacement entre les lignes ? -->
 							<li class="fragment">catégorisation ?</li>
 							<li class="fragment">
 								UnexpectedFile ressemble à une erreur mais est à droite
@@ -143,7 +122,6 @@
 							<li class="fragment">
 								DataFile ressemble à une entrée métier à traiter mais est à gauche
 							</li>
-							<li class="fragment">brainfuck</li>
 						</ul>
 						<aside class="notes">
 							Ça, c'est du code que j'ai écrit. Si un jour tu tombes dessus Sylvain, 
@@ -157,9 +135,7 @@
 				<!-- 2. C'est quoi Either ? -->
 				<section>
 					<section>
-						<!-- trouver un meilleur truc pour mettre en valeur le code dans les 
-							titres -->
-						<h2>Mais au fait, c'est quoi <mark>Either</mark> exactement ?</h2>
+						<h2>Mais au fait, c'est quoi <code class="bg">Either</code> exactement ?</h2>
 					</section>
 					<!-- This is cool but I don't want to rely on internet connection. -->
 					<!-- <section data-background-iframe="https://www.scala-lang.org/api/current/scala/util/Either.html"> -->
@@ -173,8 +149,6 @@
 							<li class="fragment">coproduit</li>
 							<li class="fragment">sum type</li>
 							<li class="fragment">(encore plein d'autres noms)</li>
-							<!-- Utiliser autre chose qu'Either/Left/Right ici ? 
-								Fruit/Apple/Banana ? Autre chose de plus binaire ? -->
 							<li class="fragment"><pre><code class="scala" data-trim>
 								sealed trait Either
 								case object Left extends Either
@@ -203,12 +177,14 @@
 							</code></pre>
 						</div>
 					</section>
-					<!-- Ici ou entre les parties 1 et 2 ? L'avantage d'ici c'est les sealed 
-					families ont déjà été évoquées. -->
 					<section>
-						<h3>Pourquoi utiliser Either[BinaryFile, SourceFile] ?</h3>
+						<h3>
+              Pourquoi utiliser <code class="bg">Either[BinaryFile,SourceFile]</code> ?
+            </h3>
 						<ul>
-							<li class="fragment">pas forcément le besoin (ni le temps) de tout modéliser tout le temps</li>
+							<li class="fragment">
+                pas forcément le besoin (ni le temps) de tout modéliser tout le temps
+              </li>
 							<li class="fragment"><pre><code class="scala" data-trim>
 								import fancy.jar.BinaryFile
 								import other.fancy.jar.SourceFile
@@ -237,12 +213,13 @@
 				<!-- 3. Pourquoi Either c'est pas toujours bien ? -->
 				<section>
 					<section>
-						<h2>Pourquoi utiliser <mark>Either</mark> n'est pas toujours idéal ?</h2>
+						<h2>
+              Pourquoi utiliser <code class="bg">Either</code> n'est pas toujours idéal ?
+            </h2>
           </section>
           
           <!-- 3.1. Ambiguïté -->
 					<section>
-						<!-- Trouver mieux comme titre ? -->
 						<h3>Le code est la montagne à gravir</h3>
 						<p>L'interprétation du code dépend :</p>
 						<ul>
@@ -258,8 +235,7 @@
 						<p>L'interprétation d'un type dépend (idéalement) :</p>
 						<ul>
 							<li class="fragment">de sa définition uniquement</li>
-						</ul>
-						<!-- TODO espacer -->
+            </ul>
 						<p class="fragment">Or la combinaison de la définition d'Either et 
 							son usage conventionnel créent de l'ambiguïté.</p>
 						<!-- insérer GIF ? peut-être 
@@ -270,7 +246,6 @@
 					</section>
 					<section>
 						<h3>Either est trop général</h3>
-						<!-- def decodeFile(file: File): Either[FileDecodingError, DecodedFile] -->
 						<pre><code class="scala" data-trim>
 							// validation : Left = erreur
 							def validateFile(file: File): Either[FileValidationError, DataFile]
@@ -375,7 +350,7 @@
 							}
 
 							val marc = Worker(age = 27, workedQuarters = 15)
-							retire(marc) // Left(Seq(TooYoung, DidNotWorkedEnough))
+							retire(marc) // Left(List(DidNotWorkedEnough, TooYoung))
 						</code></pre>
 						<aside class="notes">
 							On est tout nu pour faire de l'accumulation, obligé de faire du 
@@ -387,24 +362,17 @@
 					<section>
 						<h3>Traverse</h3>
 						<pre><code class="scala" data-trim>
-							val eithers: List[Either[CannotRetireError, Pensioner]] =
-							  Left(TooYoung) :: Right(marc) :: Left(DidNotWorkedEnough) :: Nil
+							val eithers: List[Either[CannotRetireError, Pensioner]] = /*...*/
 
 							val todo: Either[List[CannotRetireError], List[Pensioner]] = ???
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-						  val eithers: List[Either[List[CannotRetireError], Pensioner]] = 
-						    List(
-						      Left(TooYoung :: DidNotWorkedEnough),
-						      Right(marc),
-						      Left(TooYoung :: Nil)
-						    )
+						  val eithers: List[Either[List[CannotRetireError], Pensioner]] = /*...*/
 
 						  val todo: Either[List[CannotRetireError], List[Pensioner]] = ???
 						</code></pre>
 						<p class="fragment">Qui a envie d'écrire ce code ?</p>
 						<aside class="notes">
-							(on peut voir que Marc s'en est sorti)
 							(si des gens répondent oui dire "Ça me rassure, je ne suis pas le 
 							seul à être masochiste.")
 						</aside>
@@ -419,10 +387,10 @@
 					<section data-transition=none>
 						<h2>Validation</h2>
 						<ul>
-							<li>scalactic.Or</li>
-							<li>cats.Validated</li>
+							<li><code>scalactic.Or</code></li>
+							<li><code>cats.Validated</code></li>
+							<li><code>scalaz.Validation</code></li>
 							<li>...</li>
-							<!-- list more -->
 						</ul>
 						<aside class="notes">
 							Il existe un paquet de libs pour faire de la validation, entre autres ...
@@ -432,10 +400,10 @@
 					<section data-transition=none>
 						<h2>Validation</h2>
 						<ul>
-							<li><mark>scalactic.Or</mark></li>
-							<li>cats.Validated</li>
+							<li><code><mark>scalactic.Or</mark></code></li>
+							<li><code>cats.Validated</code></li>
+							<li><code>scalaz.Validation</code></li>
 							<li>...</li>
-							<!-- list more -->
 						</ul>
 					</section>
 				</section>
@@ -456,7 +424,7 @@
 						</ul>
 						<aside class="notes">
 							- (donc déjà dans ton scope de test si tu utilises Scalatest)
-							- petite librairie (cats-core 2.1.0 2072 classes 4,7 Mo) mais plus 
+							- petite librairie (cats-core 2.1.0 : 2072 classes 4,7 Mo) mais plus 
 							tellement : a doublé de volume entre la 3.0.8 et la 3.1.0 
 							(315 -> 504 classes, 706 Ko -> 1,5 Mo)
 							- 3.1.0 sortie le 29/11 dernier
@@ -465,11 +433,17 @@
           
           <!-- 5.2. Or -->
 					<section>
-						<h3>scalactic.Or</h3>
+						<h3><code>scalactic.Or</code></h3>
 						<ul>
-							<li class="fragment">Either[L, R] devient Or[G, B]</li>
-							<li class="fragment">Left devient Good</li>
-							<li class="fragment">Right devient Bad</li>
+							<li class="fragment">
+                <code class="bg">Either[L, R]</code> devient <code class="bg">Or[G, B]</code>
+              </li>
+							<li class="fragment">
+                <code class="bg">Left</code> devient <code class="bg">Good</code>
+              </li>
+							<li class="fragment">
+                <code class="bg">Right</code> devient <code class="bg">Bad</code>
+              </li>
 							<li class="fragment">erreurs à droite</li>
 						</ul>
 						<aside class="notes">
@@ -477,6 +451,7 @@
 						</aside>
 					</section>
 					<section>
+            <h3>Utilisation identique...</h3>
 						<pre><code class="scala" data-trim>
 							for {
 							  x <- Right(1)
@@ -488,7 +463,8 @@
 							  x <- Good(1)
 							  y <- Bad("Error")
 							} yield x + y // Bad("Error")
-						</code></pre>
+            </code></pre>
+            <h3>...mais différence sémantique.</h3>
 						<aside class="notes">
 							Les types Good et Bad portent une sémantique contrairement à Left et Right.
 						</aside>
@@ -499,31 +475,27 @@
 							def validateFile(file: File): Either[FileValidationError, DataFile]
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							// validation
 							def validateFile(file: File): Or[DataFile, FileValidationError]
-						</code></pre>
+            </code></pre>
+            <p class="fragment">validation</ul>
 					</section>
-					<!-- Pas sûr que ce soit franchement nécessaire à ce stade. C'est bien 
-					pour l'exhaustivité mais risque de perdre de vue l'objectif de montrer 
-					l'ambiguïté. -->
-					<!-- <section>
-						<pre><code class="scala" data-trim>
-							def decodeFile(file: File): Either[FileDecodingError, DecodedFile]
-						</code></pre>
-						<aside class="notes">
-						</aside>
-					</section> -->
+          <aside class="notes">
+            Interroger l'audience (on recommence l'exercice mais avec Or).
+          </aside>
 					<section>
 						<pre><code class="scala" data-trim>
 							// catégorisation
 							def classifyFile(file: File): Either[SourceFile, BinaryFile]
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							// Bad[SourceFile] ??
-							// erreur de programmation manifeste
 							def classifyFile(file: File): Or[BinaryFile, SourceFile]
-						</code></pre>
+            </code></pre>
+            <ul>
+              <li class="fragment"><code>Bad[SourceFile]</code> ??</li>
+              <li class="fragment">erreur de programmation manifeste</li>
+            </ul>
 						<aside class="notes">
+              Je peux pointer ça en code-review sans hésiter.
 							Ne doit pas changer, ne rentre pas dans le use-case de Or.
 						</aside>
 					</section>
@@ -533,9 +505,9 @@
 							def validateFile(file: File): Either[UnexpectedFile, DataFile]
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							// UnexpectedFile est une erreur car Bad
 							def validateFile(file: File): Or[DataFile, UnexpectedFile]
-						</code></pre>
+            </code></pre>
+            <p class="fragment">UnexpectedFile est une erreur car Bad.</p>
 					</section>
 					<section>
 						<pre><code class="scala" data-trim>
@@ -543,9 +515,9 @@
 							def classifyFile(file: File): Either[UnexpectedFile, DataFile]
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							// validation
 							def classifyFile(file: File): Or[DataFile, UnexpectedFile]
 						</code></pre>
+            <p class="fragment">validation</ul>
 					</section>
 					<section>
 						<pre><code class="scala" data-trim>
@@ -553,16 +525,20 @@
 							def classifyFile(file: File): Either[DataFile, UnexpectedFile]
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-							// erreur de programmation manifeste
 							def classifyFile(file: File): Or[UnexpectedFile, DataFile]
 						</code></pre>
+            <ul>
+              <li class="fragment">
+                <code>Good[UnexpectedFile]</code> et <code>Bad[DataFile]</code> ??
+              </li>
+              <li class="fragment">erreur de programmation manifeste</li>
+            </ul>
 						<aside class="notes">
 							Mauvais usage du type Or.
 						</aside>
 					</section>
 					<section>
 						<h3>Moins d'ambiguïté</h3>
-						<!-- def decodeFile(file: File): Either[FileDecodingError, DecodedFile] -->
 						<pre><code class="scala" data-trim>
 							// validation : Bad = erreur
 							def validateFile(file: File): Or[DataFile, FileValidationError]
@@ -615,9 +591,9 @@
           </section>
           <section>
             <h3>Inconvénients de Or 2/2</h3>
-            Erreurs à droite -> principle of least surprise bafoué
-            <!-- TODO spacing -->
-            (cats.Validated, ZIO et certainement d'autres respectent la convention)
+            Erreurs à droite -> principe de moindre surprise bafoué
+            <br/><br/>
+            (cats, scalaz, ZIO, ... respectent la convention)
 						<aside class="notes">
               Ne respecte pas la convention (principle of least surprise).
               Pose des problèmes aux collègues en cours d'appropriation de la 
@@ -633,7 +609,10 @@
 						</code></pre>
 						<pre><code class="scala" data-trim>
 							def validateFile(file: File): DataFile Or FileValidationError
-						</code></pre>
+            </code></pre>
+						<aside class="notes">
+              Avant de parler d'accumulation...
+						</aside>
 					</section>
 					<section>
 						<h3>Every</h3>
@@ -646,8 +625,8 @@
 							NonEmptyList backée par un Vector, va nous servir pour l'accumulation.
 						</aside>
 					</section>
-					<!-- définir DidNotWorkedEnough, Worker et Pensioner ? -->
 					<section>
+            <h3>Accumulation</h3>
 						<pre><code class="scala" data-trim>
 							import org.scalactic.Accumulation._
 						</code></pre>
@@ -655,13 +634,13 @@
 					<section>
 						<h3>Accumulation avec withGood 1/3</h3>
 						<pre><code class="scala" data-trim>
+							case class Person(name: String, age: Int)
+						</code></pre>
+						<pre><code class="scala" data-trim>
 							sealed trait ParseError
 							case object EmptyName extends ParseError
 							case object NegativeAge extends ParseError
-							case object InvalidAge extends ParseError
-						</code></pre>
-						<pre><code class="scala" data-trim>
-							case class Person(name: String, age: Int)
+							case object AgeNotInt extends ParseError
 						</code></pre>
 						<aside class="notes">
 							Dans l'exemple qui va suivre on va vouloir valider des inputs textuels 
@@ -680,7 +659,7 @@
 							def parseAge(input: String): Int Or One[ParseError] = try {
 							  val age = input.trim.toInt
 							  if (age >= 0) Good(age) else Bad(One(NegativeAge))
-							} catch { case _: NumberFormatException => Bad(One(InvalidAge)) }
+							} catch { case _: NumberFormatException => Bad(One(AgeNotInt)) }
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
 							def parsePerson(inputName: String, inputAge: String)
@@ -704,13 +683,13 @@
 							// Result: Good(Person(Bridget Jones,29))
 							
 							parsePerson("Bridget Jones", "")
-							// Result: Bad(One(InvalidAge))
+							// Result: Bad(One(AgeNotInt))
 							
 							parsePerson("Bridget Jones", "-29")
 							// Result: Bad(One(NegativeAge))
 							
 							parsePerson("", "")
-							// Result: Bad(Many(InvalidAge, NegativeAge))
+							// Result: Bad(Many(EmptyName, AgeNotInt))
 						</code></pre>
 						<aside class="notes">
 						</aside>
@@ -752,18 +731,14 @@
           </section>
           <section>
             <h3>Limitations 1/2</h3>
-            firstGood?
+            firstGood ?
             <pre><code class="scala" data-trim>
-              def resolveFile(inputFile: Path): List[Path] Or Every[InputError] = /*...*/
-              def resolveGlob(inputGlob: Path): List[Path] Or Every[InputError] = /*...*/
+              def resolveFile(input: Path): List[Path] Or Every[InputError] = /*...*/
+              def resolveGlob(input: Path): List[Path] Or Every[InputError] = /*...*/
 
               val pathsOrErrors: List[Path] Or Every[InputError] = 
                 firstGood(resolveFilePath(inputPath), resolveGlobPath(inputPath))
             </code></pre>
-						<aside class="notes">
-              Validation supporte l'opérateur && mais pas ||. Ait dû implémenter 
-              une implicit class de Or avec une méthode whenOneOf.
-						</aside>
           </section>
           <section>
             <h3>Limitations 2/2</h3>
@@ -772,37 +747,35 @@
               def hasFrenchHeaders(file: File): Validation[DecodeError] = /*...*/
               def hasEnglishHeaders(file: File): Validation[DecodeError] = /*...*/
 
-              Good(file).when(hasFrenchHeaders && hasEnglishHeaders) // OK
-              Good(file).when(hasFrenchHeaders || hasEnglishHeaders) // compile error
+              hasFrenchHeaders(file) && hasEnglishHeaders(file) // OK
+              hasFrenchHeaders(file) || hasEnglishHeaders(file) // compile error
             </code></pre>
-          </section>
-          <section>
-						<pre><code class="scala" data-trim>
-              val aGoodOne: Int Or String = Good(1)
-              aGoodOne.accumulating // Int Or One[String]
-						</code></pre>
+						<aside class="notes">
+              Validation supporte l'opérateur && mais pas ||. Ait dû implémenter 
+              une implicit class de Or avec une méthode whenOneOf.
+						</aside>
           </section>
           <section>
 						<h3>Traverse</h3>
 						<pre><code class="scala" data-trim>
-              val ors: List[Pensioner Or CannotRetireError] =
-                Bad(TooYoung) :: Good(marc) :: Bad(DidNotWorkedEnough) :: Nil
-
+              import org.scalactic.Accumulation._
+						</code></pre>
+						<pre><code class="scala" data-trim>
+              val ors: List[Pensioner Or CannotRetireError] = /*...*/
+						</code></pre>
+            <pre class="fragment"><code class="scala" data-trim>
               val accumulatingOrs: List[Pensioner Or One[CannotRetireError]] = 
                 ors.map(_.accumulating)
-                
+            </code></pre>
+						<pre class="fragment"><code class="scala" data-trim>
               val pensionersOrErrors: List[Pensioner] Or Every[CannotRetireError] =
-                accumulatingOrs.combined // needs import org.scalactic.Accumulation._
+                accumulatingOrs.combined
 						</code></pre>
 						<pre class="fragment"><code class="scala" data-trim>
-              val ors: List[Pensioner Or Every[CannotRetireError]] = List(
-                Bad(Many(TooYoung, DidNotWorkedEnough)),
-                Good(marc),
-                Bad(One(TooYoung))
-              )
+              val ors: List[Pensioner Or Every[CannotRetireError]] = /*...*/
 
               val pensionersOrErrors: List[Pensioner] Or Every[CannotRetireError] = 
-                ors.combined // needs import org.scalactic.Accumulation._
+                ors.combined
 						</code></pre>
 						<aside class="notes">
               La subtilité c'est qu'il faut être sur des ors accumulatifs.
@@ -811,15 +784,15 @@
 
           <!-- 5.4. Divers -->
           <section>
-            withFilter est défini via Validation :
+            <h3><code>withFilter</code></h3>
             <pre><code class="scala" data-trim>
-              def greaterThan0(i: Int): Validation[String] =
-                if (i > 0) Pass else Fail(s"$i is less than or equal to 0")
-                
               for {
                 i <- Good(-1)
                 if greaterThan0(i)
-              } yield i // Bad("-1 is less than or equal to 0")
+              } yield i // Bad("-1 <= 0")
+
+              def greaterThan0(i: Int): Validation[String] =
+                if (i > 0) Pass else Fail(s"$i <= 0")
             </code></pre>
 						<aside class="notes">
               Pas très pratique, en réalité pas vraiment implémenté, délègue à
@@ -827,7 +800,7 @@
 						</aside>
           </section>
           <section>
-            mais cela empêche les "refutable patterns" de fonctionner :
+            <h3>Refutable patterns</h3>
             <pre><code class="scala" data-trim>
               for (x: Int <- Good(1)) yield x
               // error: type mismatch;
@@ -881,7 +854,7 @@
         <!-- 6. Composition -->
         <section>
           <section>
-            <h2>Composition de monades</h2>
+            <h2>Problème de composition</h2>
           </section>
           <section>
             <h3>API</h3>
@@ -914,7 +887,7 @@
             </code></pre>
 						<aside class="notes">
               Vu qu'on va faire une requête HTTP et écrire sur un système de fichier
-              distant, il paraît légitime de vouloir en faire un traitement asynchrone
+              distant, il paraît légitime de vouloir en faire un traitement asynchrone.
 						</aside>
           </section>
           <section>
@@ -954,11 +927,9 @@
 						<h2>Composition / Asynchronisme</h2>
 						<ul>
 							<li>Monad transformer maison</li>
-							<li>cats.EitherT (monad transformer)</li>
-							<li>cats.IO</li> <!-- à vérifier -->
-							<li>ZIO</li>
+							<li><code>cats.EitherT</code> (monad transformer)</li>
+							<li><code>ZIO</code></li>
 							<li>...</li>
-							<!-- list more ? -->
 						</ul>
 						<aside class="notes">
               Il existe aussi un paquet d'alternatives pour faire de la composition 
@@ -969,11 +940,9 @@
 						<h2>Composition / Asynchronisme</h2>
 						<ul>
 							<li><mark>Monad transformer maison</mark></li>
-							<li>cats.EitherT (monad transformer)</li>
-							<li>cats.IO</li> <!-- à vérifier -->
-							<li><mark>ZIO</mark></li>
+							<li><code>cats.EitherT</code> (monad transformer)</li>
+							<li><mark><code>ZIO</code></mark></li>
 							<li>...</li>
-							<!-- list more ? -->
 						</ul>
 						<aside class="notes">
 							Là aussi, on va se concentrer sur celles que j'ai essayé.
@@ -1018,8 +987,8 @@
           <section>
             <h3>ZIO</h3>
             <div class="fragment">
-              <pre><code class="scala" data-trim>
-                trait ZIO[R, E, A]
+              <pre class="small"><code class="scala" data-trim>
+                ZIO[R, E, A]
               </code></pre>
               <ul>
                 <li>R - environement</li>
@@ -1033,7 +1002,7 @@
           </section>
           <section>
             <h3>IO</h3>
-            <pre><code class="scala" data-trim>
+            <pre class="medium"><code class="scala" data-trim>
               type IO[E, A] = ZIO[Any, E, A]
             </code></pre>
             <ul>
@@ -1053,7 +1022,7 @@
               // thread pools
               val runtime = new zio.DefaultRuntime {}
 
-              // en principe 1 seul appel unique dans le main
+              // en principe un seul appel unique dans le main
               runtime.unsafeRun(io) // 42
             </code></pre>
           </section>
@@ -1117,8 +1086,6 @@
             <aside class="notes">
               Demander à l'audience ?
               C'est une des erreurs principales.
-              Peut-être que des IO monads plus génériques comme (cats.IO ?) permettent 
-              de contourner le problème de coût.
               Le type IO n'a du sens que dans le main, ce qui est rarement le cas dans 
               nos bases de code qui font du akka-stream, du Play ou du Slick, etc. 
               où on introduit ZIO.
