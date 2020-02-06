@@ -268,7 +268,7 @@
 						<pre><code class="scala" data-trim>
 							import MonadicEither._
 
-							Right(1).flapMap(Left("Error"))
+							Right(1).flapMap(_ => Left("Error"))
 						</code></pre>
 						<aside class="notes">
 							Qui utilise encore scala 2.11 ? Nous mais chut.<br/>
@@ -285,7 +285,7 @@
 						<pre><code class="scala" data-trim>
 							import MonadicEither._
 
-							Right(1).flapMap(Left("Error"))
+							Right(1).flapMap(_ => Left("Error"))
 						</code></pre>
           </section>
           
