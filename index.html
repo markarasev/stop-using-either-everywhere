@@ -312,20 +312,20 @@
 					<section>
 						<h3>Accumulation d'erreurs</h3>
 						<pre><code class="scala" data-trim>
-							def retire(worker: Worker): Either[List[CannotRetireError], Pensioner] = {
-							  var errors = List.empty // erf
-							  if (worker.age < 62) 
-							    errors = CannotRetireError.TooYoung +: errors // uuh
-							  if (worker.workedQuarters < 172) 
-							    errors = CannotRetireError.DidNotWorkedEnough +: errors // ooh
-							  if (errors.isEmpty) Right(Pensioner(worker)) else Left(errors)
-							}
-
-							val marc = Worker(age = 27, workedQuarters = 15)
-							retire(marc) // Left(List(DidNotWorkedEnough, TooYoung))
+              def retire(worker: Worker): Either[List[CannotRetireError], Pensioner] = {
+                val isTooYoung = if (worker.age >= 62) None 
+                  else Some(CannotRetireError.TooYoung)
+                val didWorkedEnough = if (worker.workedQuarters >= 172) None
+                  else Some(CannotRetireError.DidNotWorkedEnough) 
+                val errors = List(isTooYoung, didWorkedEnough).flatten
+                if (errors.isEmpty) Right(Pensioner(worker)) else Left(errors)
+              }
+              
+              val marc = Worker(age = 27, workedQuarters = 15)
+              retire(marc) // Left(List(DidNotWorkedEnough, TooYoung))
 						</code></pre>
 						<aside class="notes">
-              tout nu pour faire de l'accumulation -> mutable<br/>
+              tout nu pour faire de l'accumulation<br/>
               liste non vide pour les erreurs ?
 						</aside>
 					</section>
